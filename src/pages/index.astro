@@ -1,0 +1,18 @@
+---
+import Layout from "../layout/Layout.astro";
+import HeroSection from "../components/HeroSection.astro"
+import AboutExtended from "../components/Preact/AboutExtended.tsx";
+import ContactDetails from "../components/Contact/ContactDetails.astro";
+import About from "../components/About.astro";
+import ClientsSection from "../components/ClientsSection.tsx"
+import PlanosFlexiveis from "../components/Preact/PlanosFlexiveis";
+---
+
+<Layout>
+	<HeroSection />
+	<About />
+	<AboutExtended client:visible />
+	<PlanosFlexiveis client:visible />
+	<ClientsSection client:visible/>
+	<ContactDetails />
+</Layout>

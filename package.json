@@ -1,0 +1,21 @@
+{
+  "name": "protipstech",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/preact": "^4.1.0",
+    "@egjs/flicking-plugins": "^4.7.1",
+    "@egjs/preact-flicking": "^4.14.0",
+    "@tailwindcss/vite": "^4.1.11",
+    "astro": "^5.11.1",
+    "preact": "^10.26.9",
+    "swiper": "^11.2.10",
+    "tailwindcss": "^4.1.11"
+  }
+}
