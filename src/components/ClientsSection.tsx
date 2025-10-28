@@ -6,7 +6,7 @@ const cases = {
     descricao:
       'Empresa familiar com mais de 10 anos de experiência em Seattle e região, oferecendo serviços residenciais e comerciais de limpeza com foco em qualidade, confiança e consistência.',
     ganhos: [
-      'Integração com Google, Slack e E-mail',
+      'Integração com Google, Slack, E-mail e CRM',
       'Crescimento no Instagram com conteúdo local',
       'Campanhas com leads semanais em Seattle',
       'Landing pages otimizadas para conversão',
@@ -15,17 +15,17 @@ const cases = {
     site: 'https://www.fontesandfontescleaning.com/'
   },
   sga: {
-    nome: 'SGA Imóveis',
+    nome: 'FS Construction & Remodeling',
     descricao:
-      'Com mais de 10 anos de experiência no mercado capixaba, a SGA conecta pessoas ao imóvel ideal em Vila Velha com agilidade, transparência e atendimento humanizado.',
+      'Com mais de 20 anos de experiência no setor, a FS Construction and Remodeling é reconhecida por fornecer serviços e projetos excepcionais aos seus clientes. Fornecendo dês de pequenos reparos e reformas até construções de casas do zero',
     ganhos: [
       'Melhoria no SEO e Google Meu Negócio',
       'Tráfego pago com campanhas sazonais',
       'Dashboards e relatórios automatizados',
       'Campanhas de e-mail e remarketing',
-      'Integração com WhatsApp e drive da equipe'
+      'Integração com Google, slack, e-mail e WhatsApp'
     ],
-    site: 'https://www.sgainvestimentos.com.br/'
+    site: 'https://www.fsconstructionandremodeling/'
   }
 };
 
