@@ -1,50 +1,65 @@
 ---
-// src/components/ContactForm.astro
-const { id = "ContactForm", source = "" } = Astro.props;
+/* File: src/components/ContactFormBR.astro */
+const { id = "ContactFormBR", source = "" } = Astro.props;
+
+// ========= Config =========
+const API_KEY_HEADER   = "X-Api-Key";
+const API_KEY_VALUE    = import.meta.env.PUBLIC_FORM_API_KEY; // defina no .env: PUBLIC_FORM_API_KEY=seu_token
+const WEBHOOK_URL      = "https://n8n.srv1067458.hstgr.cloud/webhook/d211b50f-eb73-4f62-9922-1ca7d1620548";
+const RECAPTCHA_SITEKEY = "6Le01ewrAAAAAE3bo2skuTBUhbAqQZBTC0vkITle"; // gere um site key autorizado p/ seu domínio
 ---
 
-<form id={id} action="https://jsmcleaning.up.railway.app/" class="space-y-6">
+<form id={id} action={WEBHOOK_URL} method="POST" class="space-y-6">
   <!-- Honeypot -->
   <div class="hidden">
     <label for="website">Website</label>
     <input type="text" id="website" name="website" />
   </div>
 
-  <!-- Contact Details -->
+  <!-- Timestamp anti-bot -->
+  <input type="hidden" name="ts_loaded" value={Date.now().toString()} />
+
+  <!-- Dados de contato -->
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-    <div class="flex gap-2">
-      <input
-        type="text"
-        id="firstName"
-        name="firstName"
-        placeholder="First Name"
-        required
-        class="w-full border border-text_gray rounded-md px-4 py-2"
-      />
-      <input
-        type="text"
-        id="lastName"
-        name="lastName"
-        placeholder="Last Name"
-        required
-        class="w-full border border-text_gray rounded-md px-4 py-2"
-      />
-    </div>
+    <!-- Nome / Sobrenome na mesma linha no md+ -->
+    <input
+      type="text"
+      id="firstName"
+      name="firstName"
+      placeholder="Nome"
+      required
+      class="w-full border border-text_gray rounded-md px-4 py-2"
+      autocomplete="given-name"
+    />
+    <input
+      type="text"
+      id="lastName"
+      name="lastName"
+      placeholder="Sobrenome"
+      required
+      class="w-full border border-text_gray rounded-md px-4 py-2"
+      autocomplete="family-name"
+    />
+
     <input
       type="email"
       id="email"
       name="email"
-      placeholder="Email"
+      placeholder="E-mail"
       required
       class="w-full border border-text_gray rounded-md px-4 py-2 md:col-span-2"
+      autocomplete="email"
     />
+
     <input
       type="tel"
       id="phone"
       name="phone"
-      placeholder="Phone"
+      placeholder="Telefone (com DDD)"
       required
       class="w-full border border-text_gray rounded-md px-4 py-2 md:col-span-2"
+      inputmode="tel"
+      autocomplete="tel"
     />
   </div>
 
@@ -52,20 +67,31 @@ const { id = "ContactForm", source = "" } = Astro.props;
     type="text"
     id="subject"
     name="subject"
-    placeholder="subject"
+    placeholder="Assunto"
     required
     class="w-full border border-text_gray rounded-md px-4 py-2"
   />
 
-  <!-- Message -->
+  <!-- Mensagem -->
   <textarea
     id="message"
     name="message"
     rows="4"
-    placeholder="Please provide as much information as you can (optional)"
-    class="w-full border border-text_gray rounded-md px-4 py-2"></textarea>
+    placeholder="Descreva sua necessidade (opcional)"
+    class="w-full border border-text_gray rounded-md px-4 py-2"
+  ></textarea>
 
-  <!-- Consent -->
+  <!-- CEP (BR) -->
+  <input
+    type="text"
+    id="zipCode"
+    name="zipCode"
+    placeholder="CEP (ex: 01310-200)"
+    class="w-full border border-text_gray rounded-md px-4 py-2"
+    inputmode="numeric"
+  />
+
+  <!-- Consentimento -->
   <div class="mb-4">
     <label class="flex items-center">
       <input
@@ -75,142 +101,209 @@ const { id = "ContactForm", source = "" } = Astro.props;
         required
         class="form-checkbox h-4 w-4 text-primary rounded"
       />
-      <span class="ml-2 text-gray-700 text-sm"
-        >I agree to receive email or SMS.</span
-      >
+      <span class="ml-2 text-gray-700 text-sm">
+        Concordo em receber contato por e-mail ou WhatsApp.
+      </span>
     </label>
   </div>
 
-  <!-- Submit -->
+  <!-- Enviar -->
   <button
     type="submit"
     class="w-full bg-primary text-white font-semibold py-3 px-6 rounded-md hover:bg-dark transition"
   >
-    Send Request
+    Enviar solicitação
   </button>
 
   <p id="result" class="text-center text-sm text-gray-500 mt-4"></p>
   <input type="hidden" name="formSource" value={source} />
 </form>
 
-<!-- Modal para reCAPTCHA -->
+<!-- Modal reCAPTCHA (sem fundo escuro) -->
 <div
   id="recaptchaModal"
-  class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden z-50"
+  class="fixed inset-0 flex items-center justify-center bg-transparent hidden z-50"
 >
   <div class="bg-white p-6 rounded shadow-lg relative w-fit">
     <button
       id="closeModal"
       class="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
-      >&times;</button
+      aria-label="Fechar modal"
     >
+      &times;
+    </button>
     <div id="recaptcha-container"></div>
   </div>
 </div>
 
-<!-- Scripts -->
+<!-- reCAPTCHA em pt-BR -->
 <script
-  src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
+  src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit&hl=pt-BR"
   async
-  defer></script>
+  defer
+></script>
 
-<!-- define:vars injeta a prop `id` no client-side JS -->
-<script define:vars={{ id }}>
+<script define:vars={{ id, API_KEY_HEADER, API_KEY_VALUE, WEBHOOK_URL, RECAPTCHA_SITEKEY }}>
   let recaptchaWidgetId;
   let isRendered = false;
 
   function onloadCallback() {
-    if (!isRendered) renderRecaptcha();
+    // render somente quando abrir o modal
   }
 
   function renderRecaptcha() {
-    recaptchaWidgetId = grecaptcha.render("recaptcha-container", {
-      sitekey: "6LfnqH8rAAAAAKbtGQX8cjjl8oXGmo0STQOBnVW7",
-      callback: onReCaptchaSuccess,
-    });
-    isRendered = true;
+    const container = document.getElementById("recaptcha-container");
+    if (!container) return;
+
+    if (!isRendered) {
+      recaptchaWidgetId = grecaptcha.render(container, {
+        sitekey: RECAPTCHA_SITEKEY,
+        callback: onReCaptchaSuccess,
+      });
+      isRendered = true;
+    } else {
+      grecaptcha.reset(recaptchaWidgetId);
+    }
   }
 
-  function onReCaptchaSuccess(token) {
+  function openModal() {
+    const modal = document.getElementById("recaptchaModal");
+    modal.classList.remove("hidden");
+    modal.classList.add("flex");
+    setTimeout(renderRecaptcha, 100);
+  }
+
+  function closeModal() {
+    const modal = document.getElementById("recaptchaModal");
+    modal.classList.add("hidden");
+    modal.classList.remove("flex");
+    if (typeof grecaptcha !== "undefined" && recaptchaWidgetId != null) {
+      grecaptcha.reset(recaptchaWidgetId);
+    }
+  }
+
+  // Validações BR
+  function validarTelefoneBR(valor) {
+    const digits = (valor || "").replace(/\D/g, "");
+    // Aceita 10 (fixo) ou 11 (móvel iniciando com 9). DDD válido (11–99)
+    if (digits.length === 10) {
+      // (DD) XXXXX-XXXX (fixo 8 dígitos)
+      const [ddd, p1] = [digits.slice(0,2), digits.slice(2)];
+      return /^[1-9]\d$/.test(ddd) && /^\d{8}$/.test(p1);
+    }
+    if (digits.length === 11) {
+      const [ddd, n1] = [digits.slice(0,2), digits.slice(2)];
+      return /^[1-9]\d$/.test(ddd) && /^9\d{8}$/.test(n1); // móvel começa com 9
+    }
+    // Com +55 (12 ou 13 dígitos) — normaliza e recursa
+    if (digits.startsWith("55")) return validarTelefoneBR(digits.slice(2));
+    return false;
+  }
+
+  function validarCEP(valor) {
+    return /^\d{5}-?\d{3}$/.test((valor || "").trim());
+  }
+
+  function validateFields() {
+    const form = document.getElementById(id);
+    if (!form) return false;
+
+    // Honeypot
+    const honeypot = form.querySelector('input[name="website"]')?.value || "";
+    if (honeypot) return false;
+
+    // Tempo mínimo
+    const ts = parseInt(form.querySelector('input[name="ts_loaded"]')?.value || "0", 10);
+    if (Date.now() - ts < 2000) {
+      alert("Envio muito rápido. Preencha o formulário normalmente e tente novamente.");
+      return false;
+    }
+
+    // Telefone BR
+    const phoneInput = document.getElementById("phone");
+    if (!validarTelefoneBR(phoneInput.value)) {
+      alert("Telefone inválido. Use DDD e, se celular, inclua o 9.");
+      phoneInput.focus();
+      return false;
+    }
+
+    // CEP (opcional – só valida se preenchido)
+    const zipInput = document.getElementById("zipCode");
+    if (zipInput && zipInput.value && !validarCEP(zipInput.value)) {
+      alert("CEP inválido. Ex.: 01310-200 ou 01310200");
+      zipInput.focus();
+      return false;
+    }
+
+    // Consentimento
+    const consent = document.getElementById("consent");
+    if (!consent?.checked) {
+      alert("Você precisa aceitar o contato por e-mail ou WhatsApp.");
+      return false;
+    }
+
+    // API key obrigatória se o webhook exigir cabeçalho
+    if (!API_KEY_VALUE) {
+      console.error("PUBLIC_FORM_API_KEY não definido");
+      alert("Erro de configuração: chave de API ausente.");
+      return false;
+    }
+
+    return true;
+  }
+
+  async function onReCaptchaSuccess(token) {
     const form = document.getElementById(id);
     const result = document.getElementById("result");
-    const modal = document.getElementById("recaptchaModal");
     if (!form || !result) return;
 
     const data = new FormData(form);
     data.append("g-recaptcha-response", token);
 
     result.style.display = "block";
-    result.textContent = "Sending...";
+    result.textContent = "Enviando...";
     result.className = "text-center text-sm text-gray-500 mt-4";
 
-    fetch(form.action, {
-      method: "POST",
-      headers: { Authorization: "Bearer 5yEp7tdDOBWVkEx4GAbReVFv65yL26" },
-      body: data,
-    })
-      .then(async (res) => {
-        if (res.ok) {
-          result.textContent = "Form sent successfully!";
-          result.className = "text-center text-sm text-green-500 mt-4";
-          form.reset();
-        } else {
-          const txt = await res.text();
-          result.textContent = "Error sending form: " + txt;
-          result.className = "text-center text-sm text-red-500 mt-4";
-        }
-      })
-      .catch(() => {
-        result.textContent = "Network error.";
-        result.className = "text-center text-sm text-red-500 mt-4";
-      })
-      .finally(() => {
-        modal.classList.add("hidden");
-        grecaptcha.reset(recaptchaWidgetId);
-        setTimeout(() => (result.style.display = "none"), 5000);
+    try {
+      const res = await fetch(WEBHOOK_URL, {
+        method: "POST",
+        headers: { [API_KEY_HEADER]: API_KEY_VALUE },
+        body: data,
       });
+
+      if (!res.ok) {
+        const txt = await res.text();
+        throw new Error(txt || `HTTP ${res.status}`);
+      }
+
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event: "form_submit" });
+
+      result.textContent = "Formulário enviado com sucesso!";
+      result.className = "text-center text-sm text-green-500 mt-4";
+
+      form.reset();
+      window.location.href = "/thanks";
+    } catch (e) {
+      result.textContent = "Erro ao enviar: " + (e?.message || "desconhecido");
+      result.className = "text-center text-sm text-red-500 mt-4";
+    } finally {
+      closeModal();
+      setTimeout(() => (result.style.display = "none"), 5000);
+    }
   }
 
   document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById(id);
-    const phone = document.getElementById("phone");
-    const zip = document.getElementById("zipCode");
-    const consent = document.getElementById("consent");
-    const modal = document.getElementById("recaptchaModal");
     const closeBtn = document.getElementById("closeModal");
-    if (!form || !phone || !zip || !consent) return;
+    if (!form) return;
 
     form.addEventListener("submit", (e) => {
       e.preventDefault();
-
-      // Honeypot
-      if (form.website && form.website.value) return;
-
-      // Phone & ZIP validation
-      const phonePattern =
-        /^(\+1\s?)?(\([0-9]{3}\)|\d{3})[\s.-]?\d{3}[\s.-]?\d{4}$/;
-      if (!phonePattern.test(phone.value.trim())) {
-        alert("Invalid phone number.");
-        return;
-      }
-      const zipPattern = /^[0-9]{5}(?:-[0-9]{4})?$/;
-      if (!zipPattern.test(zip.value.trim())) {
-        alert("Invalid ZIP code.");
-        return;
-      }
-      if (!consent.checked) {
-        alert("You must agree to receive email or SMS.");
-        return;
-      }
-
-      // Show reCAPTCHA modal
-      modal.classList.remove("hidden");
-      setTimeout(renderRecaptcha, 100);
+      if (!validateFields()) return;
+      openModal();
     });
 
-    closeBtn.addEventListener("click", () => {
-      modal.classList.add("hidden");
-      if (isRendered) grecaptcha.reset(recaptchaWidgetId);
-    });
+    closeBtn?.addEventListener("click", () => closeModal());
   });
 </script>
