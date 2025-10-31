@@ -4,7 +4,7 @@ import "../styles/global.css";
 
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
-import ScrollToTopBtn from "../components/usables/ScrollToTopBtn.astro"
+import ScrollToTopBtn from "../components/usables/ScrollToTopBtn.astro";
 ---
 
 <html lang="pt-br" class="scroll-smooth">
@@ -12,8 +12,35 @@ import ScrollToTopBtn from "../components/usables/ScrollToTopBtn.astro"
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Scalyns - Marketing Digital & Automação</title>
+
+        <!-- Google Tag Manager -->
+        <script>
+            (function (w, d, s, l, i) {
+                w[l] = w[l] || [];
+                w[l].push({
+                    "gtm.start": new Date().getTime(),
+                    event: "gtm.js",
+                });
+                var f = d.getElementsByTagName(s)[0],
+                    j = d.createElement(s),
+                    dl = l != "dataLayer" ? "&l=" + l : "";
+                j.async = true;
+                j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+                f.parentNode.insertBefore(j, f);
+            })(window, document, "script", "dataLayer", "GTM-TP3R9QKS");
+        </script>
+        <!-- End Google Tag Manager -->
     </head>
     <body class="bg-gray-50 text-gray-800 font-body">
+        <!-- Google Tag Manager (noscript) -->
+        <noscript
+            ><iframe
+                src="https://www.googletagmanager.com/ns.html?id=GTM-TP3R9QKS"
+                height="0"
+                width="0"
+                style="display:none;visibility:hidden"></iframe></noscript
+        >
+        <!-- End Google Tag Manager (noscript) -->
         <Header />
         <main id="main-content">
             <slot />
