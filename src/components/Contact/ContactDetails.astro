@@ -15,15 +15,15 @@ const {
     class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-start"
   >
     <!-- Contact Info -->
-    <div class="space-y-6"  id="contato">
+    <div class="space-y-6" id="contato">
       <h2 class="text-3xl font-bold text-dark">{title}</h2>
       <h3 class="text-2xl font-bold text-dark">{subTitle}</h3>
       <p class="text-text_gray">
-        Na Scalyns, ajudamos pequenas e médias empresas a conquistarem
-        presença digital estratégica, escalarem campanhas e integrarem
-        ferramentas de automação com inteligência. Se você precisa de ajuda com
-        marketing digital, está buscando soluções sob medida para o seu negócio
-        ou quer entender como crescer com mais eficiência — fale com a gente.
+        Na Scalyns, ajudamos pequenas e médias empresas a conquistarem presença
+        digital estratégica, escalarem campanhas e integrarem ferramentas de
+        automação com inteligência. Se você precisa de ajuda com marketing
+        digital, está buscando soluções sob medida para o seu negócio ou quer
+        entender como crescer com mais eficiência — fale com a gente.
       </p>
       <p class="text-text_gray">
         Seja você um empreendedor solo, parte de uma equipe de vendas ou o
@@ -45,7 +45,7 @@ const {
             <p class="text-xl text-primary font-semibold">{address}</p>
           </div>
         </div>
-        <div class="flex items-start gap-4">
+        <div class="flex items-center gap-3">
           <div class="text-3xl text-primary">
             <img
               class="h-8"
@@ -53,14 +53,30 @@ const {
               alt="phone"
             />
           </div>
-          <div>
-            <p>
-              <a href={`tel:${phone}`} class="hover:text-primary transition"
-                >{phone}</a
-              >
-            </p>
-          </div>
+          <p class="flex items-center gap-4">
+            <a
+              href={`tel:${phone}`}
+              class="hover:text-primary transition font-medium"
+            >
+              {phone}
+            </a>
+            <a
+              href={`https://wa.me/5527992788033?text=Olá!%20Gostaria%20de%20saber%20mais%20sobre%20os%20serviços%20da%20Scalyns.`}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="flex items-center gap-1 text-green-600 hover:text-green-700 transition"
+              aria-label="Falar pelo WhatsApp"
+            >
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
+                alt="WhatsApp"
+                class="h-8 w-8"
+              />
+              <span class="font-medium">WhatsApp</span>
+            </a>
+          </p>
         </div>
+
         <div class="flex items-start gap-4">
           <div class="text-3xl text-primary">
             <img
