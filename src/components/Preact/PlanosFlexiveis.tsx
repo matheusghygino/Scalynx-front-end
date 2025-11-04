@@ -11,16 +11,16 @@ export default function PlanosFlexiveis() {
   const [tipo, setTipo] = useState<'mensal' | 'semestral' | 'anual'>('mensal');
 
   return (
-    <section class="py-24 bg-white" id="pacotes" >
+    <section class="py-24" id="pacotes" >
       <div class="max-w-6xl mx-auto px-6">
-        <h2 class="text-3xl md:text-4xl font-title text-primary mb-10 text-center">Soluções Flexíveis</h2>
+        <h2 class="text-3xl md:text-4xl font-title mb-10 text-center">Soluções Flexíveis</h2>
         <PlanoTabs aba={aba} setAba={setAba} />
         <div class="mt-8">
           {aba === 'modular' ? (
             <>
               <CardsServicos />
               <div class="text-center md:mt-8">
-                <a href="#contato" class="inline-block bg-primary text-white font-semibold px-6 py-3 rounded-full hover:bg-primary-dark transition">
+                <a href="#contato" class="inline-block font-semibold px-6 py-3 rounded-full transition">
                   Entre em contato
                 </a>
               </div>

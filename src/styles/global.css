@@ -1,7 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Bilo:wght@400;500;700&display=swap');
+
 @import "tailwindcss";
 @theme {
-  --font-display: "Poppins", sans-serif;
-  --font-body: "Bilo", sans-serif;
-  --color-primary: #134378;
-  --color-secondary: #58AFE3;
+  --font-display: "Montserrat", sans-serif;
+  --font-body: "Poppins", sans-serif;
+
+  --color-primary: #141b41;     /* Azul marinho */
+  --color-secondary: #371425;   /* Bordô */
+  --color-terciary: #99a1af;
+  --color-t-primary: #EAEAEA;   /* Texto claro */
+  --color-t-secondary: #99a1af; /* Texto secundário */
+  --color-bg: #121624;          /* Fundo menos escuro */
+  --color-surface: #171b2b;     /* Fundo de seções */
+
+  --btn-primary-bg: #99a1af;
+  --btn-primary-text: #141b41;
+  --btn-primary-hover: #8c94a3;
 }
+
+html, body {
+  font-family: var(--font-body);
+  color: var(--color-t-primary);
+  background-color: var(--color-bg);
+  margin: 0;
+  padding: 0;
+  line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  color: var(--color-t-secondary);
+  font-weight: 600;
+}
+
+a, button:hover {
+  cursor: pointer;
+}
+

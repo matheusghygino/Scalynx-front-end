@@ -43,7 +43,7 @@ export default function ComoTrabalhamos() {
   const atual = tabs.find((t) => t.id === ativo)!;
 
   return (
-    <section id="metodologia" class="py-24 bg-white">
+    <section id="metodologia" class="py-24 bg-gray-50">
       <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-10 items-center">
         {/* Tabs */}
         <div>

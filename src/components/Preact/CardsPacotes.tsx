@@ -11,7 +11,7 @@ const CardsPacotes: FunctionalComponent<Props> = ({ tipoPagamento }) => {
     <>
       <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
         <div class="flex gap-2">
-          <span class="bg-blue-100 text-blue-600 text-xs font-semibold px-3 py-1 rounded-full">
+          <span class="bg-blue-100 text-surface text-xs font-semibold px-3 py-1 rounded-full">
             Promoção: 10% OFF no semestral, 20% OFF no anual
           </span>
         </div>
@@ -37,7 +37,7 @@ const CardsPacotes: FunctionalComponent<Props> = ({ tipoPagamento }) => {
             <div
               class={`rounded-lg p-6 text-left shadow-md transition-transform duration-300 flex flex-col justify-between ${
                 destaque
-                  ? 'bg-gradient-to-b from-[#0063F6]/10 to-white border border-[#0063F6]/30 scale-[1.02]'
+                  ? 'bg-gradient-to-b from-primary/10 to-white border border-[#0063F6]/30 scale-[1.02]'
                   : 'bg-white'
               }`}
             >
@@ -47,7 +47,7 @@ const CardsPacotes: FunctionalComponent<Props> = ({ tipoPagamento }) => {
 
                 {mostrarPreco ? (
                   <div class="flex items-center justify-start gap-2 mb-4">
-                    <p class="text-2xl font-bold text-blue-500">R$ {precoFinal}/mês</p>
+                    <p class="text-2xl font-bold text-surface">R$ {precoFinal}/mês</p>
                     {descontoLabel && (
                       <span class="bg-green-100 text-green-600 text-xs font-semibold px-2 py-0.5 rounded-full">
                         {descontoLabel}
@@ -55,7 +55,7 @@ const CardsPacotes: FunctionalComponent<Props> = ({ tipoPagamento }) => {
                     )}
                   </div>
                 ) : (
-                  <p class="text-2xl font-bold text-gray-600 mb-4">CUSTOM</p>
+                  <p class="text-2xl font-bold text-surface mb-4">CUSTOM</p>
                 )}
 
                 <a

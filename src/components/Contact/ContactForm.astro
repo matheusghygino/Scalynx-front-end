@@ -9,7 +9,7 @@ const WEBHOOK_URL      = "https://n8n.srv1067458.hstgr.cloud/webhook/d211b50f-eb
 const RECAPTCHA_SITEKEY = "6Le01ewrAAAAAE3bo2skuTBUhbAqQZBTC0vkITle"; // gere um site key autorizado p/ seu domínio
 ---
 
-<form id={id} action={WEBHOOK_URL} method="POST" class="space-y-6">
+<form id={id} action={WEBHOOK_URL} method="POST" class="space-y-6 text-black">
   <!-- Honeypot -->
   <div class="hidden">
     <label for="website">Website</label>
@@ -28,7 +28,7 @@ const RECAPTCHA_SITEKEY = "6Le01ewrAAAAAE3bo2skuTBUhbAqQZBTC0vkITle"; // gere um
       name="firstName"
       placeholder="Nome"
       required
-      class="w-full border border-text_gray rounded-md px-4 py-2"
+      class="w-full border border-gray-300 rounded-md px-4 py-2 placeholder-gray-500"
       autocomplete="given-name"
     />
     <input
@@ -37,7 +37,7 @@ const RECAPTCHA_SITEKEY = "6Le01ewrAAAAAE3bo2skuTBUhbAqQZBTC0vkITle"; // gere um
       name="lastName"
       placeholder="Sobrenome"
       required
-      class="w-full border border-text_gray rounded-md px-4 py-2"
+      class="w-full border border-gray-300 rounded-md px-4 py-2 placeholder-gray-500"
       autocomplete="family-name"
     />
 
@@ -47,7 +47,7 @@ const RECAPTCHA_SITEKEY = "6Le01ewrAAAAAE3bo2skuTBUhbAqQZBTC0vkITle"; // gere um
       name="email"
       placeholder="E-mail"
       required
-      class="w-full border border-text_gray rounded-md px-4 py-2 md:col-span-2"
+      class="w-full border border-gray-300 rounded-md px-4 py-2 md:col-span-2 placeholder-gray-500"
       autocomplete="email"
     />
 
@@ -57,7 +57,7 @@ const RECAPTCHA_SITEKEY = "6Le01ewrAAAAAE3bo2skuTBUhbAqQZBTC0vkITle"; // gere um
       name="phone"
       placeholder="Telefone (com DDD)"
       required
-      class="w-full border border-text_gray rounded-md px-4 py-2 md:col-span-2"
+      class="w-full border border-gray-300 rounded-md px-4 py-2 md:col-span-2 placeholder-gray-500"
       inputmode="tel"
       autocomplete="tel"
     />
@@ -69,7 +69,7 @@ const RECAPTCHA_SITEKEY = "6Le01ewrAAAAAE3bo2skuTBUhbAqQZBTC0vkITle"; // gere um
     name="subject"
     placeholder="Assunto"
     required
-    class="w-full border border-text_gray rounded-md px-4 py-2"
+    class="w-full border border-gray-300 rounded-md px-4 py-2 placeholder-gray-500"
   />
 
   <!-- Mensagem -->
@@ -78,18 +78,8 @@ const RECAPTCHA_SITEKEY = "6Le01ewrAAAAAE3bo2skuTBUhbAqQZBTC0vkITle"; // gere um
     name="message"
     rows="4"
     placeholder="Descreva sua necessidade (opcional)"
-    class="w-full border border-text_gray rounded-md px-4 py-2"
+    class="w-full border border-gray-300 rounded-md px-4 py-2 placeholder-gray-500"
   ></textarea>
-
-  <!-- CEP (BR) -->
-  <input
-    type="text"
-    id="zipCode"
-    name="zipCode"
-    placeholder="CEP (ex: 01310-200)"
-    class="w-full border border-text_gray rounded-md px-4 py-2"
-    inputmode="numeric"
-  />
 
   <!-- Consentimento -->
   <div class="mb-4">
@@ -99,7 +89,7 @@ const RECAPTCHA_SITEKEY = "6Le01ewrAAAAAE3bo2skuTBUhbAqQZBTC0vkITle"; // gere um
         id="consent"
         name="consent"
         required
-        class="form-checkbox h-4 w-4 text-primary rounded"
+        class="form-checkbox h-4 w-4 text-primary rounded placeholder-gray-500"
       />
       <span class="ml-2 text-gray-700 text-sm">
         Concordo em receber contato por e-mail ou WhatsApp.
@@ -200,10 +190,6 @@ const RECAPTCHA_SITEKEY = "6Le01ewrAAAAAE3bo2skuTBUhbAqQZBTC0vkITle"; // gere um
     return false;
   }
 
-  function validarCEP(valor) {
-    return /^\d{5}-?\d{3}$/.test((valor || "").trim());
-  }
-
   function validateFields() {
     const form = document.getElementById(id);
     if (!form) return false;
@@ -224,14 +210,6 @@ const RECAPTCHA_SITEKEY = "6Le01ewrAAAAAE3bo2skuTBUhbAqQZBTC0vkITle"; // gere um
     if (!validarTelefoneBR(phoneInput.value)) {
       alert("Telefone inválido. Use DDD e, se celular, inclua o 9.");
       phoneInput.focus();
-      return false;
-    }
-
-    // CEP (opcional – só valida se preenchido)
-    const zipInput = document.getElementById("zipCode");
-    if (zipInput && zipInput.value && !validarCEP(zipInput.value)) {
-      alert("CEP inválido. Ex.: 01310-200 ou 01310200");
-      zipInput.focus();
       return false;
     }
 

@@ -10,7 +10,7 @@ const links = [
 ---
 <header
   id="siteHeader"
-  class="fixed top-0 left-0 w-full z-50 shadow bg-gray-400 bg-opacity-90 backdrop-blur transition-transform duration-300 -translate-y-0 px-4 md:px-20"
+  class="fixed top-0 left-0 w-full z-50 shadow bg-opacity-90 backdrop-blur transition-transform duration-300 -translate-y-0 px-4 md:px-20 bg-gradient-to-r from-primary to-secondary"
 >
   <div class="container mx-auto flex justify-between items-center py-4">
     <a href="/">
@@ -25,21 +25,21 @@ const links = [
 
     <nav class="hidden md:flex space-x-10 items-center text-base font-semibold">
       {links.map((link) => (
-        <a href={link.href} class="text-gray-700 hover:text-primary transition-colors">{link.label}</a>
+        <a href={link.href} class="hover:text-terciary transition-colors">{link.label}</a>
       ))}
       <a href="#contato" class="bg-primary text-white px-5 py-2 rounded-full hover:bg-secondary transition">Solicitar Proposta</a>
     </nav>
   </div>
 
   <div
-    id="mobileMenu"
-    class="fixed top-0 left-0 w-full h-screen -translate-x-full opacity-0 bg-primary text-white z-40 flex flex-col items-center justify-center text-lg font-semibold transition-all duration-700 ease-in-out"
+    id="mobileMenu" 
+    class="fixed top-0 left-0 w-full h-screen -translate-x-full opacity-0 bg-gradient-to-r from-primary to-secondary text-white z-40 flex flex-col items-center justify-center text-lg font-semibold transition-all duration-700 ease-in-out"
   >
     <nav class="flex flex-col space-y-6 text-center">
       {links.map((link) => (
         <a href={link.href} class="hover:text-secondary" onclick="closeMobileMenu()">{link.label}</a>
       ))}
-      <a href="#contato" class="bg-white text-primary px-6 py-2 rounded-full hover:bg-gray-100 transition" onclick="closeMobileMenu()">Solicitar Proposta</a>
+      <a href="#contato" class="px-6 py-2 rounded-full transition" onclick="closeMobileMenu()">Solicitar Proposta</a>
     </nav>
   </div>
 </header>

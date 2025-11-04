@@ -12,14 +12,14 @@ const PlanoTabs: FunctionalComponent<Props> = ({ aba, setAba }) => {
             <button
                 onClick={() => setAba('modular')}
                 class={`px-6 py-2 rounded-full font-semibold border transition duration-200
-          ${aba === 'modular' ? 'bg-primary text-white border-primary' : 'bg-white text-primary border-gray-300 hover:bg-gray-100'}`}
+          ${aba === 'modular' ? ' border-terciary' : 'border-gray-300 hover:bg-gray-100'}`}
             >
                 Serviços Modulares
             </button>
             <button
                 onClick={() => setAba('pacotes')}
                 class={`px-6 py-2 rounded-full font-semibold border transition duration-200
-          ${aba === 'pacotes' ? 'bg-primary text-white border-primary' : 'bg-white text-primary border-gray-300 hover:bg-gray-100'}`}
+          ${aba === 'pacotes' ? ' border-terciary' : 'border-gray-300 hover:bg-gray-100'}`}
             >
                 Pacotes Prontos
             </button>

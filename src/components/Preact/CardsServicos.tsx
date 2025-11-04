@@ -16,9 +16,9 @@ const CardsServicos = () => (
         class="h-full"
       >
         {servicos.map((s, i) => (
-          <div key={i} class="panel mx-2 border w-full bg-white rounded-lg shadow-md p-6 h-[260px]">
-            <h3 class="text-lg font-bold text-primary mb-2">{s.titulo}</h3>
-            <p class="text-gray-600 text-sm">{s.descricao}</p>
+          <div key={i} class="panel mx-2 border w-full rounded-lg shadow-md p-6 h-[260px]">
+            <h3 class="text-lg font-bold mb-2">{s.titulo}</h3>
+            <p class=" text-sm">{s.descricao}</p>
           </div>
         ))}
       </Flicking>
@@ -27,9 +27,9 @@ const CardsServicos = () => (
     {/* DESKTOP: grade padrão */}
     <div class="hidden md:grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       {servicos.map((s, i) => (
-        <div key={i} class="bg-white rounded-lg shadow-md p-6 text-left">
-          <h3 class="text-lg font-bold text-primary mb-2">{s.titulo}</h3>
-          <p class="text-gray-600 text-sm">{s.descricao}</p>
+        <div key={i} class="rounded-lg shadow-md p-6 text-left">
+          <h3 class="text-lg font-bold mb-2">{s.titulo}</h3>
+          <p class=" text-sm">{s.descricao}</p>
         </div>
       ))}
     </div>
