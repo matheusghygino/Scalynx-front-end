@@ -17,12 +17,15 @@ const links = [
       <img src={logo.src} alt="Scalyns" class="h-16 md:h-20 transition-all duration-300" />
     </a>
 
-    <button id="menuButton" class="md:hidden focus:outline-none z-50">
-      <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+    <!-- Botão hambúrguer -->
+    <button id="menuButton" class="md:hidden focus:outline-none z-50" aria-controls="mobileMenu" aria-expanded="false">
+      <svg id="menuIcon" class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path id="menuIconBars" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M4 6h16M4 12h16M4 18h16" />
       </svg>
     </button>
 
+    <!-- Desktop -->
     <nav class="hidden md:flex space-x-10 items-center text-base font-semibold">
       {links.map((link) => (
         <a href={link.href} class="hover:text-terciary transition-colors">{link.label}</a>
@@ -31,15 +34,16 @@ const links = [
     </nav>
   </div>
 
+  <!-- Mobile -->
   <div
     id="mobileMenu" 
-    class="fixed top-0 left-0 w-full h-screen -translate-x-full opacity-0 bg-gradient-to-r from-primary to-secondary text-white z-40 flex flex-col items-center justify-center text-lg font-semibold transition-all duration-700 ease-in-out"
+    class="fixed top-0 left-0 w-full h-screen -translate-x-full opacity-0 bg-gradient-to-r from-primary to-secondary text-white z-40 flex flex-col items-center justify-center text-lg font-semibold transition-all duration-500 ease-in-out"
   >
     <nav class="flex flex-col space-y-6 text-center">
       {links.map((link) => (
-        <a href={link.href} class="hover:text-secondary" onclick="closeMobileMenu()">{link.label}</a>
+        <a href={link.href} class="mobile-link hover:text-secondary">{link.label}</a>
       ))}
-      <a href="#contato" class="px-6 py-2 rounded-full transition" onclick="closeMobileMenu()">Solicitar Proposta</a>
+      <a href="#contato" class="mobile-link px-6 py-2 rounded-full bg-white/10 hover:bg-white/20 transition">Solicitar Proposta</a>
     </nav>
   </div>
 </header>
@@ -49,8 +53,29 @@ const links = [
     const header = document.getElementById("siteHeader");
     const menuButton = document.getElementById("menuButton");
     const mobileMenu = document.getElementById("mobileMenu");
+    const mobileLinks = mobileMenu?.querySelectorAll('a[href^="#"]') || [];
     let lastScrollY = window.scrollY;
     let isHidden = false;
+    let isMenuOpen = false;
+
+    // Helpers abrir/fechar menu
+    function openMobileMenu() {
+      mobileMenu.classList.remove("-translate-x-full", "opacity-0");
+      mobileMenu.classList.add("translate-x-0", "opacity-100");
+      menuButton.setAttribute("aria-expanded", "true");
+      document.body.style.overflow = "hidden";
+      isMenuOpen = true;
+    }
+    function closeMobileMenu() {
+      mobileMenu.classList.add("-translate-x-full", "opacity-0");
+      mobileMenu.classList.remove("translate-x-0", "opacity-100");
+      menuButton.setAttribute("aria-expanded", "false");
+      document.body.style.overflow = "";
+      isMenuOpen = false;
+    }
+    function toggleMobileMenu() {
+      isMenuOpen ? closeMobileMenu() : openMobileMenu();
+    }
 
     // Esconde header ao rolar
     window.addEventListener("scroll", () => {
@@ -65,6 +90,7 @@ const links = [
       lastScrollY = scrollY;
     });
 
+    // Mostra header ao levar mouse ao topo (desktop)
     document.addEventListener("mousemove", (e) => {
       if (e.clientY < 50) {
         header.classList.remove("-translate-y-full");
@@ -72,30 +98,37 @@ const links = [
       }
     });
 
-    // Toggle Mobile Menu
+    // Toggle pelo botão
     if (menuButton && mobileMenu) {
-      menuButton.addEventListener("click", () => {
-        mobileMenu.classList.toggle("-translate-x-full");
-        mobileMenu.classList.toggle("translate-x-0");
-        mobileMenu.classList.toggle("opacity-0");
-        mobileMenu.classList.toggle("opacity-100");
-      });
+      menuButton.addEventListener("click", toggleMobileMenu);
     }
-  });
 
-  function closeMobileMenu() {
-    const mobileMenu = document.getElementById("mobileMenu");
-    mobileMenu.classList.add("-translate-x-full", "opacity-0");
-    mobileMenu.classList.remove("translate-x-0", "opacity-100");
-  }
+    // Clique nos links do menu mobile: fecha + scroll suave
+    mobileLinks.forEach((a) => {
+      a.addEventListener("click", (e) => {
+        const href = a.getAttribute("href");
+        if (!href || !href.startsWith("#")) return;
+        const target = document.querySelector(href);
+        if (!target) return;
+
+        e.preventDefault();
+        // fecha o menu antes de rolar
+        closeMobileMenu();
+        // espera a transição do menu para rolar (combine com duration-500)
+        setTimeout(() => {
+          target.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 250);
+      });
+    });
+
+    // Fechar ao mudar o hash (fallback)
+    window.addEventListener("hashchange", () => {
+      if (isMenuOpen) closeMobileMenu();
+    });
+  });
 </script>
 
 <style>
-  html {
-    scroll-behavior: smooth;
-    scroll-padding-top: 100px;
-  }
-  section {
-    scroll-margin-top: 100px;
-  }
+  html { scroll-behavior: smooth; scroll-padding-top: 100px; }
+  section { scroll-margin-top: 100px; }
 </style>
