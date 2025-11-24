@@ -1,0 +1,189 @@
+---
+interface Props {
+  mauticFormId: number | string;         // id numérico do form no Mautic (ex: 2)
+  formName: string;                      // nome interno do form no Mautic (ex: "scalynsmainform")
+  backendBaseUrl: string;                // URL base do submit.php (ex: "https://mautic.scalyns.com/forms/submit.php")
+  formKey: string;                       // chave de config do formsConfig (ex: "scalynsmainform")
+  turnstileSiteKey: string;             // sitekey pública do Turnstile
+  enableBRPhoneValidation?: boolean;    // se true, aplica validação de telefone BR
+}
+
+const {
+  mauticFormId,
+  formName,
+  backendBaseUrl,
+  formKey,
+  turnstileSiteKey,
+  enableBRPhoneValidation = false,
+} = Astro.props;
+
+const mauticFormSrc = `https://mautic.scalyns.com/form/generate.js?id=${mauticFormId}`;
+const widgetId = `cf-turnstile-widget-${formName}`;
+const containerId = `turnstile-container-${formName}`;
+const wrapperId = `mautic-form-${formName}`;
+---
+
+<div id={wrapperId}>
+  <script type="text/javascript" src={mauticFormSrc}></script>
+</div>
+
+<!-- Turnstile "invisível" (na prática, escondido visualmente) -->
+<div id={containerId} style="width:0;height:0;overflow:hidden;">
+  <div
+    id={widgetId}
+    class="cf-turnstile"
+    data-sitekey={turnstileSiteKey}
+    data-callback={`onTurnstileSuccess_${formName}`}
+    data-size="flexible">
+  </div>
+</div>
+
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
+<script is:inline>
+(function() {
+  const formName = {JSON.stringify(formName)};
+  const backendUrl = {JSON.stringify(backendBaseUrl)};
+  const formKey = {JSON.stringify(formKey)};
+  const enableBRPhoneValidation = {JSON.stringify(enableBRPhoneValidation)};
+  const widgetId = {JSON.stringify(widgetId)};
+
+  // ======== Validação Telefone BR (opcional) ========
+  function validarTelefoneBR(valor) {
+    if (!valor) return false;
+    let digits = String(valor).replace(/\D/g, "");
+
+    if (digits.startsWith("55") && digits.length > 11) {
+      digits = digits.slice(2);
+    }
+
+    if (digits.length === 10) {
+      return /^[1-9]\d[2-9]\d{7}$/.test(digits);
+    }
+
+    if (digits.length === 11) {
+      return /^[1-9]\d9\d{8}$/.test(digits);
+    }
+
+    return false;
+  }
+
+  function setupPhoneValidation(form) {
+    const phoneInput =
+      form.querySelector("input[name='mauticform[mobile]']") ||
+      form.querySelector("input[name='mauticform[phone]']");
+
+    if (!phoneInput || phoneInput.dataset.brValidationAttached === "true") {
+      return;
+    }
+
+    function validate() {
+      const value = phoneInput.value || "";
+
+      if (!value.trim()) {
+        phoneInput.setCustomValidity("");
+        return;
+      }
+
+      if (!validarTelefoneBR(value)) {
+        phoneInput.setCustomValidity(
+          "Telefone inválido. Use DDD e, se celular, inclua o 9."
+        );
+      } else {
+        phoneInput.setCustomValidity("");
+      }
+    }
+
+    phoneInput.addEventListener("input", validate);
+    phoneInput.addEventListener("blur", validate);
+    phoneInput.dataset.brValidationAttached = "true";
+  }
+
+  // ======== Turnstile + override do action ========
+  let turnstileOk = false;
+  let isSubmitting = false;
+
+  // callback global específica para ESTE formName
+  window["onTurnstileSuccess_" + formName] = function(token) {
+    turnstileOk = true;
+
+    const formId = "mauticform_" + formName;
+    const form = document.getElementById(formId);
+    if (!form) return;
+
+    let hidden = form.querySelector("input[name='mauticform[turnstile_token]']");
+    if (!hidden) {
+      hidden = document.createElement("input");
+      hidden.type = "hidden";
+      hidden.name = "mauticform[turnstile_token]";
+      form.appendChild(hidden);
+    }
+    hidden.value = token;
+
+    if (!isSubmitting) {
+      isSubmitting = true;
+      form.submit();
+    }
+  };
+
+  function attachLogic() {
+    const formId = "mauticform_" + formName;
+    const form = document.getElementById(formId);
+    if (!form) {
+      console.warn("Form não encontrado:", formId);
+      return;
+    }
+
+    // Override do action -> backend genérico (submit.php)
+    form.action = backendUrl + "?form=" + encodeURIComponent(formKey);
+
+    // Validação de telefone BR se habilitada
+    if (enableBRPhoneValidation) {
+      setupPhoneValidation(form);
+    }
+
+    form.addEventListener("submit", function(e) {
+      if (isSubmitting) return;
+
+      if (!turnstileOk) {
+        e.preventDefault();
+        const widget = document.getElementById(widgetId);
+
+        if (typeof turnstile !== "undefined" && widget) {
+          turnstile.execute(widget);
+        } else {
+          alert("Erro ao carregar a verificação anti-robô. Atualize a página e tente novamente.");
+        }
+      }
+    });
+  }
+
+  function initWhenReady() {
+    const formId = "mauticform_" + formName;
+    const existing = document.getElementById(formId);
+    if (existing) {
+      attachLogic();
+      return;
+    }
+
+    let attempts = 0;
+    const interval = setInterval(() => {
+      const f = document.getElementById(formId);
+      if (f) {
+        clearInterval(interval);
+        attachLogic();
+      }
+      attempts++;
+      if (attempts > 20) clearInterval(interval);
+    }, 300);
+  }
+
+  window.addEventListener("mauticformInit", initWhenReady);
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initWhenReady);
+  } else {
+    initWhenReady();
+  }
+})();
+</script>

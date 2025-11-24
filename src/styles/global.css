@@ -1,24 +1,33 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Bilo:wght@400;500;700&display=swap');
 
 @import "tailwindcss";
+
 @theme {
   --font-display: "Montserrat", sans-serif;
   --font-body: "Poppins", sans-serif;
 
-  --color-primary: #141b41;     /* Azul marinho */
-  --color-secondary: #371425;   /* Bordô */
+  --color-primary: #141b41;
+  /* Azul marinho */
+  --color-dark: #0e1230;
+  --color-secondary: #371425;
+  /* Bordô */
   --color-terciary: #99a1af;
-  --color-t-primary: #EAEAEA;   /* Texto claro */
-  --color-t-secondary: #99a1af; /* Texto secundário */
-  --color-bg: #121624;          /* Fundo menos escuro */
-  --color-surface: #171b2b;     /* Fundo de seções */
+  --color-t-primary: #EAEAEA;
+  /* Texto claro */
+  --color-t-secondary: #99a1af;
+  /* Texto secundário */
+  --color-bg: #121624;
+  /* Fundo menos escuro */
+  --color-surface: #171b2b;
+  /* Fundo de seções */
 
   --btn-primary-bg: #99a1af;
   --btn-primary-text: #141b41;
   --btn-primary-hover: #8c94a3;
 }
 
-html, body {
+html,
+body {
   font-family: var(--font-body);
   color: var(--color-t-primary);
   background-color: var(--color-bg);
@@ -27,13 +36,115 @@ html, body {
   line-height: 1.6;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-display);
   color: var(--color-t-secondary);
   font-weight: 600;
 }
 
-a, button:hover {
+a,
+button:hover {
   cursor: pointer;
 }
 
+
+@layer components {
+
+  /* Wrapper geral do form */
+  .mauticform_wrapper {
+    @apply w-full;
+  }
+
+  /* Container interno */
+  .mauticform-innerform {
+    @apply w-full;
+  }
+
+  /* Page wrapper: aqui sim vira grid */
+  .mauticform-page-wrapper {
+    @apply grid gap-4;
+  }
+
+  /* Cada linha/field */
+  .mauticform-row {
+    @apply w-full;
+  }
+
+  /* Esconde todos os labels (First Name, Last Name, etc.) */
+  .mauticform-label {
+    @apply hidden;
+  }
+
+  /* Inputs de texto e e-mail */
+  .mauticform-input,
+  .mauticform-selectbox {
+    @apply w-full border border-gray-300 rounded-md px-4 py-2 text-sm placeholder-gray-500 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary;
+  }
+
+  /* Textarea */
+  .mauticform-textarea {
+    @apply w-full border border-gray-300 rounded-md px-4 py-2 text-sm placeholder-gray-500 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary;
+    min-height: 7rem;
+    /* ~112px, ajusta se quiser maior ou menor */
+  }
+
+  /* Checkbox + texto */
+  .mauticform-checkboxgrp {
+    @apply flex items-center gap-2 text-sm text-gray-700 mt-2;
+  }
+
+  .mauticform-checkboxgrp input[type="checkbox"] {
+    @apply h-4 w-4 rounded border-gray-300 text-primary;
+  }
+
+  /* Botão de envio */
+  .mauticform-button {
+    @apply w-full bg-primary text-white font-semibold py-3 px-6 rounded-md hover:bg-primary/90 transition text-sm md:text-base;
+  }
+
+  .mauticform-button-wrapper {
+    @apply mt-2;
+  }
+
+  /* Mensagens de erro e sucesso */
+  .mauticform-error {
+    @apply text-sm text-red-500;
+  }
+
+  .mauticform-message {
+    @apply text-sm text-green-500;
+  }
+}
+
+/* === GRID RESPONSIVO: NOME/SOBRENOME LADO A LADO NO DESKTOP === */
+
+/*
+  Confirmando pelo HTML:
+  <form id="mauticform_scalynscontactform" ...>
+  Nome  -> .mauticform-field-1
+  Sobrenome -> .mauticform-field-2
+*/
+
+@media (min-width: 768px) {
+
+  /* 2 colunas iguais */
+  #mauticform_scalynscontactform .mauticform-page-wrapper {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* Por padrão, toda linha ocupa 2 colunas (largura total) */
+  #mauticform_scalynscontactform .mauticform-row {
+    grid-column: span 2 / span 2;
+  }
+
+  /* Nome e Sobrenome ocupam 1 coluna cada */
+  #mauticform_scalynscontactform .mauticform-row.mauticform-field-1,
+  #mauticform_scalynscontactform .mauticform-row.mauticform-field-2 {
+    grid-column: span 1 / span 1;
+  }
+}

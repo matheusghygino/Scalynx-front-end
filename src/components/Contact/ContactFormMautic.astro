@@ -1,0 +1,86 @@
+---
+import MauticTurnstileForm from "../forms/MauticTurnstileForm.astro";
+---
+
+<section class="py-4 md:py-6 bg-slate-50">
+  <div class="mx-auto max-w-3xl px-4">
+    <h2 class="mb-6 text-center text-2xl font-semibold text-slate-800">
+      Fale com a Scalyns
+    </h2>
+
+    <MauticTurnstileForm
+      mauticFormId={2}
+      formName="scalynsmainform"
+      backendBaseUrl="https://mautic.scalyns.com/forms/submit.php"
+      formKey="scalynsmainform"
+      turnstileSiteKey="0x4AAAAAACBtETYrmppk61_g"
+      enableBRPhoneValidation={true}
+    />
+    <p class="text-sm text-gray-400">Ao enviar você aceita ser contatado via e-mail e WhatsApp</p>
+  </div>
+</section>
+
+<style is:global>
+  /* Estilos específicos desse form da Scalyns */
+
+  #mauticform_wrapper_scalynsmainform {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  #mauticform_scalynsmainform .mauticform-row {
+    margin-bottom: 0.6rem !important;
+  }
+
+  #mauticform_scalynsmainform input.mauticform-input,
+  #mauticform_scalynsmainform textarea.mauticform-textarea {
+    width: 100% !important;
+    border-radius: 0.75rem !important;
+    border: 1px solid #d1d5db !important;
+    padding: 0.6rem 0.9rem !important;
+    font-size: 0.9rem !important;
+    box-sizing: border-box !important;
+    background-color: #fff !important;
+  }
+
+  #mauticform_scalynsmainform_submit .mauticform-button {
+    background-color: var(--color-primary) !important;
+    color: #fff !important;
+    border-radius: 8px !important;
+    padding: 0.75rem 1.75rem !important;
+    font-weight: 600 !important;
+    font-size: 0.85rem !important;
+    border: none !important;
+    cursor: pointer !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.08em !important;
+  }
+
+  @media (min-width: 768px) {
+    #mauticform_scalynsmainform .mauticform-page-wrapper {
+      display: flex !important;
+      flex-wrap: wrap !important;
+      gap: 0.5rem !important;
+    }
+
+    #mauticform_scalynsmainform_nome,
+    #mauticform_scalynsmainform_sobrenome {
+      flex: 1 1 calc(50% - 0.25rem) !important;
+      max-width: calc(50% - 0.25rem) !important;
+    }
+
+    #mauticform_scalynsmainform_email,
+    #mauticform_scalynsmainform_telefone,
+    #mauticform_scalynsmainform_assunto,
+    #mauticform_scalynsmainform_descreva_sua_necessidade,
+    #mauticform_scalynsmainform_submit {
+      flex: 1 1 100% !important;
+      max-width: 100% !important;
+    }
+  }
+
+  #mauticform_input_scalynsmainform_descreva_sua_necessidade::placeholder {
+    color: #9ca3af;
+    font-size: 0.85rem;
+  }
+</style>
