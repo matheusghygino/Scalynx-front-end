@@ -5,6 +5,7 @@ import "../styles/global.css";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import ScrollToTopBtn from "../components/usables/ScrollToTopBtn.astro";
+import PostHog from "../components/posthog.astro";
 ---
 
 <html lang="pt-br" class="scroll-smooth">
@@ -30,6 +31,7 @@ import ScrollToTopBtn from "../components/usables/ScrollToTopBtn.astro";
             })(window, document, "script", "dataLayer", "GTM-TP3R9QKS");
         </script>
         <!-- End Google Tag Manager -->
+        <PostHog />
     </head>
     <body class="bg-bg text-t-primary font-body">
         <!-- Google Tag Manager (noscript) -->
@@ -38,8 +40,9 @@ import ScrollToTopBtn from "../components/usables/ScrollToTopBtn.astro";
                 src="https://www.googletagmanager.com/ns.html?id=GTM-TP3R9QKS"
                 height="0"
                 width="0"
-                style="display:none;visibility:hidden"></iframe></noscript
-        >
+                style="display:none;visibility:hidden"
+            ></iframe
+        ></noscript>
         <!-- End Google Tag Manager (noscript) -->
         <Header />
         <main id="main-content">
