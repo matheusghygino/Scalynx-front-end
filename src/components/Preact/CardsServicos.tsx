@@ -47,7 +47,7 @@ const CardsServicos = () => (
     </div>
 
     {/* DESKTOP — grid com efeito hover premium */}
-    <div class="hidden md:grid gap-8 md:grid-cols-2 lg:grid-cols-3 cursor-pointer">
+    <div class="hidden md:grid gap-8 md:grid-cols-2 lg:grid-cols-3">
       {servicos.map((s, i) => (
         <div
           key={i}
