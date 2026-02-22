@@ -28,13 +28,13 @@ const cases = {
       A FS Construction & Remodeling é referência em reformas e construções residenciais em Massachusetts. 
       Antes da Scalyns, o site era lento e não gerava leads. 
       Após o redesign e a primeira campanha no Google Ads, o site alcançou nota 90+ no PageSpeed e gerou 20 leads apenas em outubro. 
-      Também ampliamos significativamente o alcance orgânico no Instagram, passando de cerca de 8 mil para mais de 100 mil visualizações mensais em apenas 3 meses.
+      Também ampliamos significativamente o alcance orgânico no Instagram, passando de cerca de 8 mil para mais de 50 mil visualizações mensais em apenas 3 meses.
     `,
     ganhos: [
       'Site 90+ no PageSpeed (antes, site lento e ineficiente)',
       '20 leads gerados no primeiro mês de campanha',
       'Crescimento no Instagram: +100 mil visualizações/mês',
-      'Tráfego pago no Google e campanhas sazonais',
+      'Tráfego pago no Google e Meta ads com campanhas sazonais',
       'Integração com E-mail e Slack',
       'Automação de relatórios e acompanhamento',
       'Reestruturação completa do funil de conversão',

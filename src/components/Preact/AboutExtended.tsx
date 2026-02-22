@@ -16,38 +16,38 @@ type Tab = {
 
 const tabs: Tab[] = [
   {
-    id: 'estrategia',
-    titulo: 'Estratégia + Conteúdo',
-    descricao: 'Unimos branding, posicionamento e criação de conteúdo estratégico para gerar valor real.',
+    id: 'infraestrutura',
+    titulo: 'Infraestrutura Digital',
+    descricao: 'Desenvolvemos site de alta performance (90+ PageSpeed), e-mail profissional, CRM personalizado e workspace completo com armazenamento em nuvem.',
     imagem: estrategia,
-    alt: 'Conteúdo estratégico'
+    alt: 'Infraestrutura digital'
   },
   {
-    id: 'performance',
-    titulo: 'Performance + Anúncios',
-    descricao: 'Rodamos campanhas otimizadas no Google, Instagram e Facebook com foco em conversão.',
+    id: 'crescimento',
+    titulo: 'Crescimento e Performance',
+    descricao: 'Gestão de tráfego pago (Google & Meta Ads), redes sociais, campanhas de e-mail marketing e geração contínua de leads.',
     imagem: performance,
-    alt: 'Performance de anúncios'
+    alt: 'Crescimento e performance'
   },
   {
-    id: 'automacao',
-    titulo: 'Automação + Inteligência',
-    descricao: 'Automatizamos seu funil com ferramentas como n8n, CRM, e tracking avançado com dashboards.',
+    id: 'operacao',
+    titulo: 'Operação e Automação',
+    descricao: 'Automação via n8n, integração com WhatsApp, Instagram, Facebook e e-mail, CRM inteligente e dashboards estratégicos.',
     imagem: automacao,
-    alt: 'Automação e inteligência'
+    alt: 'Automação e integração'
   },
 ];
 
 export default function ComoTrabalhamos() {
   const [ativo, setAtivo] = useState<string>('estrategia');
-  const atual = tabs.find((t) => t.id === ativo)!;
+  const atual = tabs.find((t) => t.id === ativo) ?? tabs[0];
 
   return (
     <section id="metodologia" class="py-24 bg-gray-50">
       <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-10 items-center">
         {/* Tabs */}
         <div>
-          <h2 class="text-3xl md:text-4xl font-title text-primary mb-6">Como Trabalhamos</h2>
+          <h2 class="text-3xl md:text-4xl font-title text-primary mb-6">Ecossistema Scalyns</h2>
           {tabs.map((tab) => (
             <button
               key={tab.id}

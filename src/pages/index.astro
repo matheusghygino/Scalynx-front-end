@@ -5,14 +5,14 @@ import AboutExtended from "../components/Preact/AboutExtended.tsx";
 import ContactDetails from "../components/Contact/ContactDetails.astro";
 import About from "../components/About.astro";
 import ClientsSection from "../components/ClientsSection.tsx"
-import PlanosFlexiveis from "../components/Preact/PlanosFlexiveis";
+import ArquiteturaModular from "../components/Preact/ArquiteturaModular";
 ---
 
 <Layout>
 	<HeroSection />
 	<About />
 	<AboutExtended client:visible />
-	<PlanosFlexiveis client:visible />
+	<ArquiteturaModular client:visible />
 	<ClientsSection client:visible/>
 	<ContactDetails />
 </Layout>
