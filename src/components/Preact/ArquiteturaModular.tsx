@@ -6,13 +6,14 @@ export default function ArquiteturaModular() {
     <section class="py-24" id="ecossistema">
       <div class="max-w-6xl mx-auto px-6">
         <h2 class="text-3xl md:text-4xl font-title mb-6 text-center">
-          Arquitetura Digital Modular
+          Ecossistema Digital Scalyns
         </h2>
 
-        <p class="text-center max-w-3xl mx-auto mb-12 text-lg">
-          Cada empresa possui uma necessidade diferente.
-          Por isso desenvolvemos um ecossistema digital personalizado,
-          conectando infraestrutura, marketing e operação em um único ambiente.
+        <p class="text-center max-w-3xl mx-auto mb-6 text-lg">
+          Não entregamos serviços isolados.
+          Construímos um sistema completo para sua empresa operar,
+          vender e se posicionar com estrutura. Desenvolvemos desde a base tecnológica até
+          presença estratégica de marca
         </p>
 
         <CardsServicos />
@@ -22,7 +23,7 @@ export default function ArquiteturaModular() {
             href="#contato"
             class="bg-primary text-white px-8 py-3 rounded-full font-semibold hover:bg-secondary transition"
           >
-            Solicitar Diagnóstico Estratégico
+            Construir minha estrutura digital
           </a>
         </div>
       </div>

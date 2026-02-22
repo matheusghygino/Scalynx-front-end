@@ -1,26 +1,32 @@
 export const servicos = [
   {
-    titulo: "Website de Alta Performance",
-    descricao: "Sites otimizados com 90+ no PageSpeed, focados em conversão e escalabilidade."
+    titulo: "Infraestrutura Digital",
+    descricao:
+      "Desenvolvimento de site de alta performance (90+ PageSpeed), e-mail profissional, CRM personalizado e workspace corporativo completo com armazenamento em nuvem."
   },
   {
-    titulo: "CRM Personalizado",
-    descricao: "Gestão completa de leads, clientes e processos internos integrada ao seu negócio."
+    titulo: "Branding & Identidade Visual",
+    descricao:
+      "Criação de identidade visual estratégica, materiais institucionais, folders e padronização da presença digital da sua marca."
   },
   {
-    titulo: "Automação Inteligente (n8n)",
-    descricao: "Integrações e fluxos automatizados entre marketing, vendas e atendimento."
-  },
-  {
-    titulo: "Workspace Corporativo",
-    descricao: "E-mail profissional, armazenamento em nuvem, pacote office e colaboração interna."
-  },
-  {
-    titulo: "Atendimento Omnichannel",
-    descricao: "WhatsApp, Instagram, Facebook e e-mail integrados em uma única central."
+    titulo: "Gestão de Redes Sociais",
+    descricao:
+      "Planejamento estratégico, criação de conteúdo, design para posts e gestão completa do Instagram, Facebook e outras plataformas."
   },
   {
     titulo: "Tráfego Pago & Performance",
-    descricao: "Google Ads, Meta Ads e campanhas otimizadas para geração contínua de leads."
+    descricao:
+      "Google Ads e Meta Ads com foco em geração de leads, campanhas sazonais e otimização contínua baseada em dados."
   },
+  {
+    titulo: "Atendimento Omnichannel",
+    descricao:
+      "Central integrada com WhatsApp, Instagram, Facebook e e-mail, conectada ao CRM para acompanhamento completo do cliente."
+  },
+  {
+    titulo: "Automação & Integrações",
+    descricao:
+      "Fluxos automatizados via n8n, integrações entre marketing, vendas e operação, dashboards e relatórios estratégicos."
+  }
 ];

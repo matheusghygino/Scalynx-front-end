@@ -6,30 +6,73 @@ import { servicos } from "./data.ts";
 
 const CardsServicos = () => (
   <>
-    {/* MOBILE: 2 cards por slide vertical, autoplay */}
-    <div class="md:hidden h-[calc(260px+16px)] overflow-hidden">
+    {/* MOBILE — 1 card principal + preview do próximo */}
+    <div class="md:hidden pl-4">
       <Flicking
         circular={true}
-        panelsPerView={2}
+        panelsPerView="auto"
         gap={16}
-        plugins={[new AutoPlay({ duration: 3000, direction: "NEXT", stopOnHover: true })]}
-        class="h-full"
+        plugins={[
+          new AutoPlay({
+            duration: 4000,
+            direction: "NEXT",
+            stopOnHover: true,
+          }),
+        ]}
       >
         {servicos.map((s, i) => (
-          <div key={i} class="panel mx-2 border w-full rounded-lg shadow-md p-6 h-[260px]">
-            <h3 class="text-lg font-bold mb-2">{s.titulo}</h3>
-            <p class=" text-sm">{s.descricao}</p>
+          <div
+            key={i}
+            class="
+          w-[85%]
+          shrink-0
+          rounded-xl
+          border border-white/10
+          bg-white/5
+          backdrop-blur-md
+          p-6
+          shadow-lg
+          transition-all duration-300
+        "
+          >
+            <h3 class="text-lg font-semibold mb-3 text-white">
+              {s.titulo}
+            </h3>
+            <p class="text-sm text-white/80 leading-relaxed">
+              {s.descricao}
+            </p>
           </div>
         ))}
       </Flicking>
     </div>
 
-    {/* DESKTOP: grade padrão */}
-    <div class="hidden md:grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+    {/* DESKTOP — grid com efeito hover premium */}
+    <div class="hidden md:grid gap-8 md:grid-cols-2 lg:grid-cols-3 cursor-pointer">
       {servicos.map((s, i) => (
-        <div key={i} class="rounded-lg shadow-md p-6 text-left">
-          <h3 class="text-lg font-bold mb-2">{s.titulo}</h3>
-          <p class=" text-sm">{s.descricao}</p>
+        <div
+          key={i}
+          class="
+            group
+            rounded-xl
+            border border-white/10
+            bg-white/5
+            backdrop-blur-md
+            p-8
+            text-left
+            transition-all duration-300
+            hover:border-primary
+            hover:bg-white/10
+            hover:-translate-y-2
+            hover:shadow-2xl
+          "
+        >
+          <h3 class="text-lg font-semibold mb-3 text-white group-hover:text-primary transition">
+            {s.titulo}
+          </h3>
+
+          <p class="text-sm text-white/80 leading-relaxed">
+            {s.descricao}
+          </p>
         </div>
       ))}
     </div>
