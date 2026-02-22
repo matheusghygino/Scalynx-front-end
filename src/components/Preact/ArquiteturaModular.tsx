@@ -1,10 +1,5 @@
 // src/components/PlanosFlexiveis.tsx
-import { useState } from 'preact/hooks';
-import  PlanoTabs from './PlanoTabs';
-import TipoPagamentoSelector from './TipoPagamentoSelector';
 import CardsServicos from './CardsServicos';
-import CardsPacotes from './CardsPacotes';
-import BotaoToggleDesconto from './BotaoToggleDesconto';
 
 export default function ArquiteturaModular() {
   return (
