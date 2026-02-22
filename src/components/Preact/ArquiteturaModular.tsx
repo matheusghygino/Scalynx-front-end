@@ -6,7 +6,7 @@ export default function ArquiteturaModular() {
     <section class="py-24" id="ecossistema">
       <div class="max-w-6xl mx-auto px-6">
         <h2 class="text-3xl md:text-4xl font-title mb-6 text-center">
-          Ecossistema Digital Scalyns
+          Arquitetura Digital Modular
         </h2>
 
         <p class="text-center max-w-3xl mx-auto mb-6 text-lg">
