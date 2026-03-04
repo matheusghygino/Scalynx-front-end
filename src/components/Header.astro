@@ -1,5 +1,6 @@
 ---
-import logo from '../../public/logo_scalyns.png'
+import { Image } from "astro:assets";
+import logo from "../assets/logo_scalyns.png";
 
 const links = [
   { href: "#sobre", label: "Sobre" },
@@ -8,42 +9,82 @@ const links = [
   { href: "#clientes", label: "Clientes" },
 ];
 ---
+
 <header
   id="siteHeader"
   class="fixed top-0 left-0 w-full z-50 shadow bg-opacity-90 backdrop-blur transition-transform duration-300 -translate-y-0 px-4 md:px-20 bg-gradient-to-r from-primary to-secondary"
 >
   <div class="container mx-auto flex justify-between items-center py-4">
     <a href="/">
-      <img src={logo.src} alt="Scalyns" class="h-16 md:h-20 transition-all duration-300" />
+      <Image
+        src={logo}
+        alt="Scalyns"
+        width={210}
+        height={64}
+        format="avif"
+        quality={80}
+        class="h-16 md:h-20"
+      />
     </a>
 
     <!-- Botão hambúrguer -->
-    <button id="menuButton" class="md:hidden focus:outline-none z-50" aria-controls="mobileMenu" aria-expanded="false">
-      <svg id="menuIcon" class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path id="menuIconBars" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-          d="M4 6h16M4 12h16M4 18h16" />
+    <button
+      id="menuButton"
+      class="md:hidden focus:outline-none z-50"
+      aria-controls="mobileMenu"
+      aria-expanded="false"
+    >
+      <svg
+        id="menuIcon"
+        class="w-6 h-6 text-white"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          id="menuIconBars"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M4 6h16M4 12h16M4 18h16"></path>
       </svg>
     </button>
 
     <!-- Desktop -->
     <nav class="hidden md:flex space-x-10 items-center text-base font-semibold">
-      {links.map((link) => (
-        <a href={link.href} class="hover:text-terciary transition-colors">{link.label}</a>
-      ))}
-      <a href="#contato" class="bg-primary text-white px-5 py-2 rounded-full hover:bg-secondary transition">Solicitar Proposta</a>
+      {
+        links.map((link) => (
+          <a href={link.href} class="hover:text-terciary transition-colors">
+            {link.label}
+          </a>
+        ))
+      }
+      <a
+        href="#contato"
+        class="bg-primary text-white px-5 py-2 rounded-full hover:bg-secondary transition"
+        >Solicitar Proposta</a
+      >
     </nav>
   </div>
 
   <!-- Mobile -->
   <div
-    id="mobileMenu" 
+    id="mobileMenu"
     class="fixed top-0 left-0 w-full h-screen -translate-x-full opacity-0 bg-gradient-to-r from-primary to-secondary text-white z-40 flex flex-col items-center justify-center text-lg font-semibold transition-all duration-500 ease-in-out"
   >
     <nav class="flex flex-col space-y-6 text-center">
-      {links.map((link) => (
-        <a href={link.href} class="mobile-link hover:text-secondary">{link.label}</a>
-      ))}
-      <a href="#contato" class="mobile-link px-6 py-2 rounded-full bg-white/10 hover:bg-white/20 transition">Solicitar Proposta</a>
+      {
+        links.map((link) => (
+          <a href={link.href} class="mobile-link hover:text-secondary">
+            {link.label}
+          </a>
+        ))
+      }
+      <a
+        href="#contato"
+        class="mobile-link px-6 py-2 rounded-full bg-white/10 hover:bg-white/20 transition"
+        >Solicitar Proposta</a
+      >
     </nav>
   </div>
 </header>
@@ -129,6 +170,11 @@ const links = [
 </script>
 
 <style>
-  html { scroll-behavior: smooth; scroll-padding-top: 100px; }
-  section { scroll-margin-top: 100px; }
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 100px;
+  }
+  section {
+    scroll-margin-top: 100px;
+  }
 </style>
