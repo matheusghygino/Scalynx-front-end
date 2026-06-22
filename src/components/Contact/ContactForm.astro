@@ -3,17 +3,26 @@
 const { id = "ContactFormBR", source = "" } = Astro.props;
 
 // ========= Config =========
-const API_KEY_HEADER    = "X-Api-Key";
-const API_KEY_VALUE     = import.meta.env.PUBLIC_FORM_API_KEY; // defina no .env: PUBLIC_FORM_API_KEY=seu_token
-const WEBHOOK_URL       = "https://n8n.scalyns.com/webhook/4b7b582b-ca45-413f-9419-67ad4669f65d";
-const RECAPTCHA_SITEKEY = "6Le01ewrAAAAAE3bo2skuTBUhbAqQZBTC0vkITle"; // gere um site key autorizado p/ seu domínio
+const WORKER_URL = "https://lead-gateway.matheus-hygino.workers.dev";
+const TURNSTILE_SITE_KEY = "0x4AAAAAACBtETYrmppk61_g";
+const FORM_ID = "site-2";
 ---
 
-<form id={id} action={WEBHOOK_URL} method="POST" class="space-y-6 text-black">
+<form
+  id={id}
+  data-contact-form
+  data-worker-url={WORKER_URL}
+  method="POST"
+  class="space-y-6 text-black"
+  novalidate
+>
+  <!-- Identificador usado pelo Worker para escolher o webhook do n8n -->
+  <input type="hidden" name="form_id" value={FORM_ID} />
+
   <!-- Honeypot -->
   <div class="hidden">
     <label for="website">Website</label>
-    <input type="text" id="website" name="website" />
+    <input type="text" id="website" name="company_website" />
   </div>
 
   <!-- Timestamp anti-bot -->
@@ -21,6 +30,9 @@ const RECAPTCHA_SITEKEY = "6Le01ewrAAAAAE3bo2skuTBUhbAqQZBTC0vkITle"; // gere um
 
   <!-- Data e hora de envio -->
   <input type="hidden" id="submittedAt" name="submittedAt" />
+
+  <!-- Origem do formulário -->
+  <input type="hidden" name="formSource" value={source} />
 
   <!-- Dados de contato -->
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -33,6 +45,7 @@ const RECAPTCHA_SITEKEY = "6Le01ewrAAAAAE3bo2skuTBUhbAqQZBTC0vkITle"; // gere um
       class="w-full border border-gray-300 rounded-md px-4 py-2 placeholder-gray-500"
       autocomplete="given-name"
     />
+
     <input
       type="text"
       id="lastName"
@@ -98,207 +111,179 @@ const RECAPTCHA_SITEKEY = "6Le01ewrAAAAAE3bo2skuTBUhbAqQZBTC0vkITle"; // gere um
     </label>
   </div>
 
+  <!-- Turnstile -->
+  <div class="flex justify-center">
+    <div
+      class="cf-turnstile"
+      data-sitekey={TURNSTILE_SITE_KEY}
+      data-theme="light"
+      data-size="normal"
+    ></div>
+  </div>
+
   <!-- Enviar -->
   <button
     type="submit"
     class="w-full bg-primary text-white font-semibold py-3 px-6 rounded-md hover:bg-dark transition"
+    data-submit-button
   >
     Enviar solicitação
   </button>
 
   <p id="result" class="text-center text-sm text-gray-500 mt-4"></p>
-  <input type="hidden" name="formSource" value={source} />
 </form>
 
-<!-- Modal reCAPTCHA (sem fundo escuro) -->
-<div
-  id="recaptchaModal"
-  class="fixed inset-0 flex items-center justify-center bg-transparent hidden z-50"
->
-  <div class="bg-white p-6 rounded shadow-lg relative w-fit">
-    <button
-      id="closeModal"
-      class="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
-      aria-label="Fechar modal"
-    >
-      &times;
-    </button>
-    <div id="recaptcha-container"></div>
-  </div>
-</div>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 
-<!-- reCAPTCHA em pt-BR -->
-<script
-  src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit&hl=pt-BR"
-  async
-  defer
-></script>
-
-<script define:vars={{ id, API_KEY_HEADER, API_KEY_VALUE, WEBHOOK_URL, RECAPTCHA_SITEKEY }}>
-  let recaptchaWidgetId;
-  let isRendered = false;
-
-  function onloadCallback() {}
-
-  function renderRecaptcha() {
-    const container = document.getElementById("recaptcha-container");
-    if (!container) return;
-
-    if (!isRendered) {
-      recaptchaWidgetId = grecaptcha.render(container, {
-        sitekey: RECAPTCHA_SITEKEY,
-        callback: onReCaptchaSuccess,
-      });
-      isRendered = true;
-    } else {
-      grecaptcha.reset(recaptchaWidgetId);
-    }
-  }
-
-  function openModal() {
-    const modal = document.getElementById("recaptchaModal");
-    modal.classList.remove("hidden");
-    modal.classList.add("flex");
-    setTimeout(renderRecaptcha, 100);
-  }
-
-  function closeModal() {
-    const modal = document.getElementById("recaptchaModal");
-    modal.classList.add("hidden");
-    modal.classList.remove("flex");
-    if (typeof grecaptcha !== "undefined" && recaptchaWidgetId != null) {
-      grecaptcha.reset(recaptchaWidgetId);
-    }
-  }
-
+<script define:vars={{ id }}>
   function validarTelefoneBR(valor) {
     const digits = (valor || "").replace(/\D/g, "");
+
     if (digits.length === 10) {
-      const [ddd, p1] = [digits.slice(0, 2), digits.slice(2)];
-      return /^[1-9]\d$/.test(ddd) && /^\d{8}$/.test(p1);
+      const ddd = digits.slice(0, 2);
+      const numero = digits.slice(2);
+      return /^[1-9]\d$/.test(ddd) && /^\d{8}$/.test(numero);
     }
+
     if (digits.length === 11) {
-      const [ddd, n1] = [digits.slice(0, 2), digits.slice(2)];
-      return /^[1-9]\d$/.test(ddd) && /^9\d{8}$/.test(n1);
+      const ddd = digits.slice(0, 2);
+      const numero = digits.slice(2);
+      return /^[1-9]\d$/.test(ddd) && /^9\d{8}$/.test(numero);
     }
-    if (digits.startsWith("55")) return validarTelefoneBR(digits.slice(2));
+
+    if (digits.startsWith("55")) {
+      return validarTelefoneBR(digits.slice(2));
+    }
+
     return false;
   }
 
-  function validateFields() {
-    const form = document.getElementById(id);
-    if (!form) return false;
-
-    const honeypot = form.querySelector('input[name="website"]')?.value || "";
+  function validateFields(form) {
+    const honeypot = form.querySelector('input[name="company_website"]')?.value || "";
     if (honeypot) return false;
 
     const ts = parseInt(form.querySelector('input[name="ts_loaded"]')?.value || "0", 10);
+
     if (Date.now() - ts < 2000) {
       alert("Envio muito rápido. Preencha o formulário normalmente e tente novamente.");
       return false;
     }
 
-    const phoneInput = document.getElementById("phone");
+    const phoneInput = form.querySelector('input[name="phone"]');
+
     if (!validarTelefoneBR(phoneInput.value)) {
       alert("Telefone inválido. Use DDD e, se celular, inclua o 9.");
       phoneInput.focus();
       return false;
     }
 
-    const consent = document.getElementById("consent");
+    const consent = form.querySelector('input[name="consent"]');
+
     if (!consent?.checked) {
       alert("Você precisa aceitar o contato por e-mail ou WhatsApp.");
       return false;
     }
 
-    if (!API_KEY_VALUE) {
-      console.error("PUBLIC_FORM_API_KEY não definido");
-      alert("Erro de configuração: chave de API ausente.");
+    if (!form.checkValidity()) {
+      form.reportValidity();
       return false;
     }
 
     return true;
   }
 
-  async function onReCaptchaSuccess(token) {
-    const form = document.getElementById(id);
-    const result = document.getElementById("result");
-    if (!form || !result) return;
-
-    // adiciona data e hora ISO do envio
-    document.getElementById("submittedAt").value = new Date().toISOString();
-
-    const data = new FormData(form);
-    data.append("g-recaptcha-response", token);
-
-    result.style.display = "block";
-    result.textContent = "Enviando...";
-    result.className = "text-center text-sm text-gray-500 mt-4";
-
-    try {
-      const res = await fetch(WEBHOOK_URL, {
-        method: "POST",
-        headers: { [API_KEY_HEADER]: API_KEY_VALUE },
-        body: data,
-      });
-
-      if (!res.ok) {
-        const txt = await res.text();
-        throw new Error(txt || `HTTP ${res.status}`);
-      }
-
-      // ========= GTM: Identify + Conversão =========
-      window.dataLayer = window.dataLayer || [];
-
-      const emailVal     = form.querySelector('#email')?.value?.trim() || "";
-      const firstNameVal = form.querySelector('#firstName')?.value?.trim() || "";
-      const lastNameVal  = form.querySelector('#lastName')?.value?.trim() || "";
-      const formNameVal  = "Contato – Site BR";
-      const formIdVal    = form.getAttribute('id') || "ContactFormBR";
-      const sourceVal    = form.querySelector('input[name="formSource"]')?.value || "";
-
-      if (emailVal) {
-        window.dataLayer.push({
-          event: "user_identified",
-          user_email: emailVal,
-          user_first_name: firstNameVal,
-          user_last_name: lastNameVal
-        });
-      }
-
-      window.dataLayer.push({
-        event: "form_submit",
-        form_id: formIdVal,
-        form_name: formNameVal,
-        form_source: sourceVal
-      });
-      // =============================================
-
-      result.textContent = "Formulário enviado com sucesso!";
-      result.className = "text-center text-sm text-green-500 mt-4";
-      form.reset();
-
-      window.location.href = "/thanks";
-    } catch (e) {
-      result.textContent = "Erro ao enviar: " + (e?.message || "desconhecido");
-      result.className = "text-center text-sm text-red-500 mt-4";
-    } finally {
-      closeModal();
-      setTimeout(() => (result.style.display = "none"), 5000);
-    }
-  }
-
   document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById(id);
-    const closeBtn = document.getElementById("closeModal");
-    if (!form) return;
+    const result = document.getElementById("result");
+    const submitButton = form?.querySelector("[data-submit-button]");
 
-    form.addEventListener("submit", (e) => {
+    if (!form || !result || !submitButton) return;
+
+    form.addEventListener("submit", async (e) => {
       e.preventDefault();
-      if (!validateFields()) return;
-      openModal();
-    });
 
-    closeBtn?.addEventListener("click", () => closeModal());
+      if (!validateFields(form)) return;
+
+      const workerUrl = form.dataset.workerUrl;
+
+      if (!workerUrl) {
+        result.textContent = "Erro de configuração: Worker ausente.";
+        result.className = "text-center text-sm text-red-500 mt-4";
+        return;
+      }
+
+      const formData = new FormData(form);
+      const turnstileToken = formData.get("cf-turnstile-response");
+
+      if (!turnstileToken) {
+        result.textContent = "Confirme a verificação de segurança antes de enviar.";
+        result.className = "text-center text-sm text-red-500 mt-4";
+        return;
+      }
+
+      document.getElementById("submittedAt").value = new Date().toISOString();
+
+      submitButton.disabled = true;
+      submitButton.textContent = "Enviando...";
+
+      result.style.display = "block";
+      result.textContent = "Enviando...";
+      result.className = "text-center text-sm text-gray-500 mt-4";
+
+      try {
+        const res = await fetch(workerUrl, {
+          method: "POST",
+          body: formData,
+        });
+
+        const responseData = await res.json().catch(() => ({}));
+
+        if (!res.ok || !responseData.success) {
+          throw new Error(responseData.message || `HTTP ${res.status}`);
+        }
+
+        window.dataLayer = window.dataLayer || [];
+
+        const emailVal = form.querySelector('#email')?.value?.trim() || "";
+        const firstNameVal = form.querySelector('#firstName')?.value?.trim() || "";
+        const lastNameVal = form.querySelector('#lastName')?.value?.trim() || "";
+        const formNameVal = "Contato – Site BR";
+        const formIdVal = form.getAttribute('id') || "ContactFormBR";
+        const sourceVal = form.querySelector('input[name="formSource"]')?.value || "";
+
+        if (emailVal) {
+          window.dataLayer.push({
+            event: "user_identified",
+            user_email: emailVal,
+            user_first_name: firstNameVal,
+            user_last_name: lastNameVal
+          });
+        }
+
+        window.dataLayer.push({
+          event: "form_submit",
+          form_id: formIdVal,
+          form_name: formNameVal,
+          form_source: sourceVal
+        });
+
+        result.textContent = "Formulário enviado com sucesso!";
+        result.className = "text-center text-sm text-green-500 mt-4";
+
+        form.reset();
+
+        if (window.turnstile) {
+          window.turnstile.reset();
+        }
+
+        window.location.href = "/thanks";
+      } catch (error) {
+        result.textContent = "Erro ao enviar: " + (error?.message || "desconhecido");
+        result.className = "text-center text-sm text-red-500 mt-4";
+      } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = "Enviar solicitação";
+      }
+    });
   });
 </script>
