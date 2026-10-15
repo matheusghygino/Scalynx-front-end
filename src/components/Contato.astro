@@ -1,0 +1,62 @@
+---
+import ContactForm from "./Contact/ContactForm.astro";
+import { contact, useTranslations, whatsapp, type Lang } from "../i18n/ui";
+
+interface Props {
+  lang?: Lang;
+  source?: string;
+}
+
+const { lang = "pt", source = "site" } = Astro.props;
+const t = useTranslations(lang);
+const message = lang === "pt" ? whatsapp.messagePt : whatsapp.messageEn;
+const whatsappHref = `${whatsapp.link}?text=${encodeURIComponent(message)}`;
+---
+
+<section id="contato" class="py-16 lg:py-24">
+  <div class="mx-auto grid max-w-6xl items-start gap-12 px-6 lg:grid-cols-2">
+    <div class="space-y-6">
+      <h2 class="font-title text-3xl leading-tight text-white md:text-4xl">{t.contact.title}</h2>
+      <p class="text-lg font-semibold text-sky-300">{t.contact.subtitle}</p>
+
+      <p class="text-sm leading-relaxed text-white/75 md:text-base">{t.contact.textOne}</p>
+      <p class="text-sm leading-relaxed text-white/75 md:text-base">{t.contact.textTwo}</p>
+
+      <div class="space-y-5 pt-2">
+        <div class="flex items-start gap-4">
+          <span class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-sky-500/10 text-sky-400">
+            <svg viewBox="0 0 24 24" class="size-5 fill-none stroke-current" stroke-width="1.8"><path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Z"></path><circle cx="12" cy="10" r="2.6"></circle></svg>
+          </span>
+          <p class="pt-2 text-sm text-white/80 md:text-base">{t.contact.address}</p>
+        </div>
+
+        <div class="flex items-start gap-4">
+          <span class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-sky-500/10 text-sky-400">
+            <svg viewBox="0 0 24 24" class="size-5 fill-none stroke-current" stroke-width="1.8"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .7 2.9a2 2 0 0 1-.5 2.1L8 10a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5c.9.3 1.9.6 2.9.7a2 2 0 0 1 1.7 2Z"></path></svg>
+          </span>
+          <div class="flex flex-wrap items-center gap-4 pt-1.5">
+            <a href={`tel:${whatsapp.phone}`} class="text-sm font-medium text-white/85 transition hover:text-white md:text-base">{whatsapp.phoneDisplay}</a>
+            <a
+              href={whatsappHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 rounded-full bg-emerald-500/15 px-4 py-1.5 text-sm font-semibold text-emerald-400 transition hover:bg-emerald-500/25"
+            >
+              <svg viewBox="0 0 24 24" class="size-4 fill-current"><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-1.7-.1a13 13 0 0 1-6.5-5.8c-.5-.8-.8-1.7-.8-2.5 0-.9.5-1.5 1-1.9.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.4l.8 1.9c.1.2 0 .4-.1.5l-.4.5c-.2.2-.3.3-.1.6a9 9 0 0 0 4 3.4c.3.2.5.1.7-.1l.9-1c.2-.2.4-.2.6-.1l1.9.9c.2.1.4.2.4.3.1.2.1.7-.1 1.1l-.6 1Z"/></svg>
+              {t.contact.whatsappCta}
+            </a>
+          </div>
+        </div>
+
+        <div class="flex items-start gap-4">
+          <span class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-sky-500/10 text-sky-400">
+            <svg viewBox="0 0 24 24" class="size-5 fill-none stroke-current" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="m3 7 9 6 9-6"></path></svg>
+          </span>
+          <a href={`mailto:${contact.email}`} class="pt-2 text-sm font-medium text-white/85 transition hover:text-white md:text-base">{contact.email}</a>
+        </div>
+      </div>
+    </div>
+
+    <ContactForm lang={lang} source={source} />
+  </div>
+</section>

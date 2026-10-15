@@ -1,0 +1,135 @@
+---
+import type { Lang } from "../../i18n/ui";
+
+interface Props {
+  lang?: Lang;
+}
+
+const { lang = "pt" } = Astro.props;
+
+const labels =
+  lang === "pt"
+    ? {
+        windowTitle: "app.scalyns.com",
+        columns: [
+          { name: "Novo contato", color: "#64748b" },
+          { name: "Negociação", color: "#3b82f6" },
+          { name: "Ganho", color: "#10b981" },
+        ],
+        deals: [
+          { col: 0, title: "Site institucional", value: "R$ 6.400", tag: "Site", tagColor: "#3b82f6" },
+          { col: 0, title: "Gestão de redes", value: "R$ 1.800/mês", tag: "Social", tagColor: "#8b5cf6" },
+          { col: 1, title: "Reforma de cozinha", value: "R$ 18.500", tag: "Proposta", tagColor: "#f59e0b" },
+          { col: 2, title: "Contrato anual", value: "R$ 24.000", tag: "Fechado", tagColor: "#10b981" },
+        ],
+        stats: [
+          { label: "Leads hoje", value: "12" },
+          { label: "Conversão", value: "32%" },
+          { label: "Em negociação", value: "R$ 41k" },
+        ],
+        activity: "Reunião amanhã, 10:00",
+        activitySource: "Google Agenda",
+      }
+    : {
+        windowTitle: "app.scalyns.com",
+        columns: [
+          { name: "New lead", color: "#64748b" },
+          { name: "Negotiation", color: "#3b82f6" },
+          { name: "Won", color: "#10b981" },
+        ],
+        deals: [
+          { col: 0, title: "Company website", value: "$ 2,400", tag: "Website", tagColor: "#3b82f6" },
+          { col: 0, title: "Social media", value: "$ 900/mo", tag: "Social", tagColor: "#8b5cf6" },
+          { col: 1, title: "Kitchen remodel", value: "$ 18,500", tag: "Proposal", tagColor: "#f59e0b" },
+          { col: 2, title: "Annual contract", value: "$ 12,000", tag: "Closed", tagColor: "#10b981" },
+        ],
+        stats: [
+          { label: "Leads today", value: "12" },
+          { label: "Conversion", value: "32%" },
+          { label: "In negotiation", value: "$ 41k" },
+        ],
+        activity: "Meeting tomorrow, 10:00 AM",
+        activitySource: "Google Calendar",
+      };
+---
+
+<div
+  class="relative mx-auto w-full max-w-xl select-none"
+  role="img"
+  aria-label={lang === "pt" ? "Prévia do Scalyns CRM com quadro kanban" : "Preview of the Scalyns CRM with a kanban board"}
+>
+  <div class="overflow-hidden rounded-2xl border border-white/10 bg-[#0e1326] shadow-2xl shadow-black/50 ring-1 ring-black/40">
+    <!-- Window chrome -->
+    <div class="flex items-center gap-3 border-b border-white/5 px-4 py-3">
+      <div class="flex gap-1.5">
+        <span class="size-2.5 rounded-full bg-red-400/80"></span>
+        <span class="size-2.5 rounded-full bg-amber-400/80"></span>
+        <span class="size-2.5 rounded-full bg-emerald-400/80"></span>
+      </div>
+      <div class="mx-auto flex items-center gap-2 rounded-md bg-white/5 px-3 py-1 text-[11px] text-white/60">
+        <svg viewBox="0 0 24 24" class="size-3 fill-none stroke-current" stroke-width="2"><path d="M12 3a9 9 0 1 0 9 9"></path><path d="M12 7v5l3 3"></path></svg>
+        {labels.windowTitle}
+      </div>
+      <div class="flex -space-x-1.5">
+        <span class="size-5 rounded-full border border-[#0e1326] bg-sky-500/80"></span>
+        <span class="size-5 rounded-full border border-[#0e1326] bg-violet-500/80"></span>
+        <span class="size-5 rounded-full border border-[#0e1326] bg-emerald-500/80"></span>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="grid grid-cols-3 gap-3 px-4 pt-4">
+      {labels.stats.map((stat) => (
+        <div class="rounded-lg border border-white/5 bg-white/[0.03] px-3 py-2">
+          <div class="text-[10px] uppercase tracking-wide text-white/45">{stat.label}</div>
+          <div class="text-sm font-semibold text-white/90">{stat.value}</div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Kanban -->
+    <div class="grid grid-cols-3 gap-3 px-4 py-4">
+      {labels.columns.map((column, columnIndex) => (
+        <div class="rounded-lg bg-white/[0.03] p-2">
+          <div class="mb-2 flex items-center justify-between px-1">
+            <span class="flex items-center gap-1.5 text-[11px] font-medium text-white/70">
+              <span class="size-1.5 rounded-full" style={`background:${column.color}`}></span>
+              {column.name}
+            </span>
+            <span class="text-[10px] text-white/35">{labels.deals.filter((deal) => deal.col === columnIndex).length}</span>
+          </div>
+          <div class="space-y-2">
+            {labels.deals
+              .filter((deal) => deal.col === columnIndex)
+              .map((deal) => (
+                <div class="rounded-md border border-white/5 bg-[#151a30] p-2 shadow-sm">
+                  <div class="text-[11px] font-medium leading-4 text-white/85">{deal.title}</div>
+                  <div class="mt-1 text-[11px] font-semibold" style={`color:${deal.tagColor}`}>{deal.value}</div>
+                  <div class="mt-1.5 flex items-center justify-between">
+                    <span
+                      class="rounded-full px-1.5 py-0.5 text-[9px] font-medium"
+                      style={`background:${deal.tagColor}22;color:${deal.tagColor}`}
+                    >
+                      {deal.tag}
+                    </span>
+                    <span class="size-4 rounded-full bg-white/10"></span>
+                  </div>
+                </div>
+              ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- Floating activity card -->
+  <div class="absolute -bottom-4 left-4 flex items-center gap-2.5 rounded-xl border border-white/10 bg-[#171b2b] px-3 py-2.5 shadow-xl shadow-black/40 sm:-left-6">
+    <span class="flex size-8 items-center justify-center rounded-lg bg-blue-500/15 text-blue-400">
+      <svg viewBox="0 0 24 24" class="size-4 fill-none stroke-current" stroke-width="2"><rect x="3" y="4" width="18" height="17" rx="3"></rect><path d="M3 9h18M8 2v4M16 2v4"></path></svg>
+    </span>
+    <div>
+      <div class="text-xs font-semibold text-white/90">{labels.activity}</div>
+      <div class="text-[10px] text-white/45">{labels.activitySource}</div>
+    </div>
+  </div>
+</div>

@@ -1,288 +1,251 @@
 ---
-/* File: src/components/ContactFormBR.astro */
-const { id = "ContactFormBR", source = "" } = Astro.props;
+import { useTranslations, type Lang } from "../../i18n/ui";
 
-// ========= Config =========
+interface Props {
+  lang?: Lang;
+  source?: string;
+  id?: string;
+  title?: string;
+}
+
+const { lang = "pt", source = "site", id = "scalynsContactForm", title } = Astro.props;
+const t = useTranslations(lang);
+const f = t.contact.form;
+
 const WORKER_URL = "https://lead-gateway.matheus-hygino.workers.dev";
 const TURNSTILE_SITE_KEY = "0x4AAAAAACBtETYrmppk61_g";
-const FORM_ID = "site-2";
+const FORM_ID = "site-4";
 ---
 
-<form
-  id={id}
-  data-contact-form
-  data-worker-url={WORKER_URL}
-  method="POST"
-  class="space-y-6 text-black"
-  novalidate
->
-  <!-- Identificador usado pelo Worker para escolher o webhook do n8n -->
-  <input type="hidden" name="form_id" value={FORM_ID} />
+<div class="rounded-2xl border border-white/10 bg-white/[0.04] p-6 shadow-xl shadow-black/30 md:p-8">
+  <h3 class="mb-5 text-center font-title text-xl font-semibold text-white">{title ?? f.title}</h3>
 
-  <!-- Honeypot -->
-  <div class="hidden">
-    <label for="website">Website</label>
-    <input type="text" id="website" name="company_website" />
-  </div>
+  <form id={id} data-contact-form data-worker-url={WORKER_URL} method="POST" class="space-y-4" novalidate>
+    <input type="hidden" name="form_id" value={FORM_ID} />
+    <input type="hidden" name="formSource" value={source} />
+    <input type="hidden" name="ts_loaded" value={Date.now().toString()} />
+    <input type="hidden" name="submittedAt" />
 
-  <!-- Timestamp anti-bot -->
-  <input type="hidden" name="ts_loaded" value={Date.now().toString()} />
+    <div class="hidden">
+      <label for={`${id}-website`}>Website</label>
+      <input type="text" id={`${id}-website`} name="company_website" tabindex="-1" autocomplete="off" />
+    </div>
 
-  <!-- Data e hora de envio -->
-  <input type="hidden" id="submittedAt" name="submittedAt" />
-
-  <!-- Origem do formulário -->
-  <input type="hidden" name="formSource" value={source} />
-
-  <!-- Dados de contato -->
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-    <input
-      type="text"
-      id="firstName"
-      name="firstName"
-      placeholder="Nome"
-      required
-      class="w-full border border-gray-300 rounded-md px-4 py-2 placeholder-gray-500"
-      autocomplete="given-name"
-    />
-
-    <input
-      type="text"
-      id="lastName"
-      name="lastName"
-      placeholder="Sobrenome"
-      required
-      class="w-full border border-gray-300 rounded-md px-4 py-2 placeholder-gray-500"
-      autocomplete="family-name"
-    />
+    <div class="grid gap-4 md:grid-cols-2">
+      <input
+        type="text"
+        name="firstName"
+        placeholder={f.firstName}
+        required
+        autocomplete="given-name"
+        class="w-full rounded-lg border border-white/10 bg-white px-4 py-2.5 text-sm text-slate-900 placeholder-slate-500 outline-none transition focus:border-sky-400 focus:ring-2 focus:ring-sky-400/30"
+      />
+      <input
+        type="text"
+        name="lastName"
+        placeholder={f.lastName}
+        required
+        autocomplete="family-name"
+        class="w-full rounded-lg border border-white/10 bg-white px-4 py-2.5 text-sm text-slate-900 placeholder-slate-500 outline-none transition focus:border-sky-400 focus:ring-2 focus:ring-sky-400/30"
+      />
+    </div>
 
     <input
       type="email"
-      id="email"
       name="email"
-      placeholder="E-mail"
+      placeholder={f.email}
       required
-      class="w-full border border-gray-300 rounded-md px-4 py-2 md:col-span-2 placeholder-gray-500"
       autocomplete="email"
+      class="w-full rounded-lg border border-white/10 bg-white px-4 py-2.5 text-sm text-slate-900 placeholder-slate-500 outline-none transition focus:border-sky-400 focus:ring-2 focus:ring-sky-400/30"
     />
 
     <input
       type="tel"
-      id="phone"
       name="phone"
-      placeholder="Telefone (com DDD)"
+      placeholder={f.phone}
       required
-      class="w-full border border-gray-300 rounded-md px-4 py-2 md:col-span-2 placeholder-gray-500"
       inputmode="tel"
       autocomplete="tel"
+      class="w-full rounded-lg border border-white/10 bg-white px-4 py-2.5 text-sm text-slate-900 placeholder-slate-500 outline-none transition focus:border-sky-400 focus:ring-2 focus:ring-sky-400/30"
     />
-  </div>
 
-  <input
-    type="text"
-    id="subject"
-    name="subject"
-    placeholder="Assunto"
-    required
-    class="w-full border border-gray-300 rounded-md px-4 py-2 placeholder-gray-500"
-  />
+    <input
+      type="text"
+      name="subject"
+      placeholder={f.subject}
+      required
+      class="w-full rounded-lg border border-white/10 bg-white px-4 py-2.5 text-sm text-slate-900 placeholder-slate-500 outline-none transition focus:border-sky-400 focus:ring-2 focus:ring-sky-400/30"
+    />
 
-  <textarea
-    id="message"
-    name="message"
-    rows="4"
-    placeholder="Descreva sua necessidade (opcional)"
-    class="w-full border border-gray-300 rounded-md px-4 py-2 placeholder-gray-500"
-  ></textarea>
+    <textarea
+      name="message"
+      rows="4"
+      placeholder={f.message}
+      class="w-full rounded-lg border border-white/10 bg-white px-4 py-2.5 text-sm text-slate-900 placeholder-slate-500 outline-none transition focus:border-sky-400 focus:ring-2 focus:ring-sky-400/30"
+    ></textarea>
 
-  <!-- Consentimento -->
-  <div class="mb-4">
-    <label class="flex items-center">
-      <input
-        type="checkbox"
-        id="consent"
-        name="consent"
-        required
-        class="form-checkbox h-4 w-4 text-primary rounded placeholder-gray-500"
-      />
-      <span class="ml-2 text-gray-700 text-sm">
-        Concordo em receber contato por e-mail ou WhatsApp.
-      </span>
+    <label class="flex items-start gap-2 text-sm text-white/75">
+      <input type="checkbox" name="consent" required class="mt-0.5 h-4 w-4 rounded border-gray-300 text-primary" />
+      <span>{f.consent}</span>
     </label>
-  </div>
 
-  <!-- Turnstile -->
-  <div class="flex justify-center">
-    <div
-      class="cf-turnstile"
-      data-sitekey={TURNSTILE_SITE_KEY}
-      data-theme="light"
-      data-size="normal"
-    ></div>
-  </div>
+    <div class="flex justify-center">
+      <div class="cf-turnstile" data-sitekey={TURNSTILE_SITE_KEY} data-theme="auto" data-size="normal"></div>
+    </div>
 
-  <!-- Enviar -->
-  <button
-    type="submit"
-    class="w-full bg-primary text-white font-semibold py-3 px-6 rounded-md hover:bg-dark transition"
-    data-submit-button
-  >
-    Enviar solicitação
-  </button>
+    <button
+      type="submit"
+      data-submit-button
+      class="w-full rounded-lg bg-primary px-6 py-3 text-sm font-semibold uppercase tracking-wide text-white transition hover:bg-dark disabled:opacity-60"
+    >
+      {f.submit}
+    </button>
 
-  <p id="result" class="text-center text-sm text-gray-500 mt-4"></p>
-</form>
+    <p id={`${id}-result`} data-result class="mt-2 hidden text-center text-sm text-white/70" role="status" aria-live="polite"></p>
+    <p class="text-center text-xs text-white/45">{f.privacy}</p>
+  </form>
+</div>
 
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 
-<script define:vars={{ id }}>
+<script define:vars={{ id, thanksUrl: f.thanksUrl, demoSubject: f.demoSubject, waitlistSubject: f.waitlistSubject, validatePhone: lang === "pt", messages: { fast: f.errors.fast, phone: f.errors.phone, consent: f.errors.consent, captcha: f.errors.captcha, captchaLoad: f.errors.captchaLoad, worker: f.errors.worker, generic: f.errors.generic, unknown: f.errors.unknown, sending: f.sending, success: f.success, submit: f.submit } }}>
   function validarTelefoneBR(valor) {
     const digits = (valor || "").replace(/\D/g, "");
-
     if (digits.length === 10) {
       const ddd = digits.slice(0, 2);
       const numero = digits.slice(2);
       return /^[1-9]\d$/.test(ddd) && /^\d{8}$/.test(numero);
     }
-
     if (digits.length === 11) {
       const ddd = digits.slice(0, 2);
       const numero = digits.slice(2);
       return /^[1-9]\d$/.test(ddd) && /^9\d{8}$/.test(numero);
     }
-
-    if (digits.startsWith("55")) {
-      return validarTelefoneBR(digits.slice(2));
-    }
-
+    if (digits.startsWith("55")) return validarTelefoneBR(digits.slice(2));
     return false;
-  }
-
-  function validateFields(form) {
-    const honeypot = form.querySelector('input[name="company_website"]')?.value || "";
-    if (honeypot) return false;
-
-    const ts = parseInt(form.querySelector('input[name="ts_loaded"]')?.value || "0", 10);
-
-    if (Date.now() - ts < 2000) {
-      alert("Envio muito rápido. Preencha o formulário normalmente e tente novamente.");
-      return false;
-    }
-
-    const phoneInput = form.querySelector('input[name="phone"]');
-
-    if (!validarTelefoneBR(phoneInput.value)) {
-      alert("Telefone inválido. Use DDD e, se celular, inclua o 9.");
-      phoneInput.focus();
-      return false;
-    }
-
-    const consent = form.querySelector('input[name="consent"]');
-
-    if (!consent?.checked) {
-      alert("Você precisa aceitar o contato por e-mail ou WhatsApp.");
-      return false;
-    }
-
-    if (!form.checkValidity()) {
-      form.reportValidity();
-      return false;
-    }
-
-    return true;
   }
 
   document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById(id);
-    const result = document.getElementById("result");
+    const result = form?.querySelector("[data-result]");
     const submitButton = form?.querySelector("[data-submit-button]");
-
     if (!form || !result || !submitButton) return;
 
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
+    function prefill(subjectValue, sourceValue) {
+      const subjectInput = form.querySelector('input[name="subject"]');
+      const sourceInput = form.querySelector('input[name="formSource"]');
+      if (subjectInput) subjectInput.value = subjectValue;
+      if (sourceInput && sourceValue) sourceInput.value = sourceValue;
+      const contactSection = document.getElementById("contato");
+      contactSection?.scrollIntoView({ behavior: "smooth", block: "start" });
+      window.setTimeout(() => subjectInput?.focus(), 600);
+    }
 
-      if (!validateFields(form)) return;
+    document.addEventListener("click", (event) => {
+      const demoButton = event.target.closest("[data-demo-cta]");
+      if (demoButton) {
+        event.preventDefault();
+        prefill(demoSubject, "crm-demo");
+        return;
+      }
+      const waitlistButton = event.target.closest("[data-waitlist]");
+      if (waitlistButton) {
+        event.preventDefault();
+        prefill(waitlistSubject, waitlistButton.getAttribute("data-waitlist") || "waitlist");
+      }
+    });
+
+    function validateFields() {
+      const honeypot = form.querySelector('input[name="company_website"]')?.value || "";
+      if (honeypot) return false;
+
+      const ts = parseInt(form.querySelector('input[name="ts_loaded"]')?.value || "0", 10);
+      if (Date.now() - ts < 2000) {
+        alert(messages.fast);
+        return false;
+      }
+
+      if (validatePhone) {
+        const phoneInput = form.querySelector('input[name="phone"]');
+        if (phoneInput && !validarTelefoneBR(phoneInput.value)) {
+          alert(messages.phone);
+          phoneInput.focus();
+          return false;
+        }
+      }
+
+      if (!form.querySelector('input[name="consent"]')?.checked) {
+        alert(messages.consent);
+        return false;
+      }
+
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return false;
+      }
+
+      return true;
+    }
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      if (!validateFields()) return;
 
       const workerUrl = form.dataset.workerUrl;
-
       if (!workerUrl) {
-        result.textContent = "Erro de configuração: Worker ausente.";
-        result.className = "text-center text-sm text-red-500 mt-4";
+        result.textContent = messages.worker;
+        result.className = "text-center text-sm text-red-400 mt-2";
+        result.classList.remove("hidden");
         return;
       }
 
       const formData = new FormData(form);
       const turnstileToken = formData.get("cf-turnstile-response");
-
       if (!turnstileToken) {
-        result.textContent = "Confirme a verificação de segurança antes de enviar.";
-        result.className = "text-center text-sm text-red-500 mt-4";
+        result.textContent = messages.captcha;
+        result.className = "text-center text-sm text-red-400 mt-2";
+        result.classList.remove("hidden");
         return;
       }
 
-      document.getElementById("submittedAt").value = new Date().toISOString();
+      const submittedAt = form.querySelector('input[name="submittedAt"]');
+      if (submittedAt) submittedAt.value = new Date().toISOString();
 
       submitButton.disabled = true;
-      submitButton.textContent = "Enviando...";
-
-      result.style.display = "block";
-      result.textContent = "Enviando...";
-      result.className = "text-center text-sm text-gray-500 mt-4";
+      submitButton.textContent = messages.sending;
+      result.textContent = messages.sending;
+      result.className = "text-center text-sm text-white/70 mt-2";
+      result.classList.remove("hidden");
 
       try {
-        const res = await fetch(workerUrl, {
-          method: "POST",
-          body: formData,
-        });
-
-        const responseData = await res.json().catch(() => ({}));
-
-        if (!res.ok || !responseData.success) {
-          throw new Error(responseData.message || `HTTP ${res.status}`);
+        const response = await fetch(workerUrl, { method: "POST", body: formData });
+        const responseData = await response.json().catch(() => ({}));
+        if (!response.ok || !responseData.success) {
+          throw new Error(responseData.message || `HTTP ${response.status}`);
         }
 
         window.dataLayer = window.dataLayer || [];
+        const email = form.querySelector('input[name="email"]')?.value?.trim() || "";
+        const firstName = form.querySelector('input[name="firstName"]')?.value?.trim() || "";
+        const lastName = form.querySelector('input[name="lastName"]')?.value?.trim() || "";
+        const sourceValue = form.querySelector('input[name="formSource"]')?.value || "";
 
-        const emailVal = form.querySelector('#email')?.value?.trim() || "";
-        const firstNameVal = form.querySelector('#firstName')?.value?.trim() || "";
-        const lastNameVal = form.querySelector('#lastName')?.value?.trim() || "";
-        const formNameVal = "Contato – Site BR";
-        const formIdVal = form.getAttribute('id') || "ContactFormBR";
-        const sourceVal = form.querySelector('input[name="formSource"]')?.value || "";
-
-        if (emailVal) {
-          window.dataLayer.push({
-            event: "user_identified",
-            user_email: emailVal,
-            user_first_name: firstNameVal,
-            user_last_name: lastNameVal
-          });
+        if (email) {
+          window.dataLayer.push({ event: "user_identified", user_email: email, user_first_name: firstName, user_last_name: lastName });
         }
+        window.dataLayer.push({ event: "form_submit", form_id: id, form_name: "Scalyns Contact", form_source: sourceValue });
 
-        window.dataLayer.push({
-          event: "form_submit",
-          form_id: formIdVal,
-          form_name: formNameVal,
-          form_source: sourceVal
-        });
-
-        result.textContent = "Formulário enviado com sucesso!";
-        result.className = "text-center text-sm text-green-500 mt-4";
-
+        result.textContent = messages.success;
+        result.className = "text-center text-sm text-emerald-400 mt-2";
         form.reset();
-
-        if (window.turnstile) {
-          window.turnstile.reset();
-        }
-
-        window.location.href = "/thanks";
+        if (window.turnstile) window.turnstile.reset();
+        window.setTimeout(() => { window.location.href = thanksUrl; }, 600);
       } catch (error) {
-        result.textContent = "Erro ao enviar: " + (error?.message || "desconhecido");
-        result.className = "text-center text-sm text-red-500 mt-4";
+        result.textContent = `${messages.generic}: ${error?.message || messages.unknown}`;
+        result.className = "text-center text-sm text-red-400 mt-2";
       } finally {
         submitButton.disabled = false;
-        submitButton.textContent = "Enviar solicitação";
+        submitButton.textContent = messages.submit;
       }
     });
   });

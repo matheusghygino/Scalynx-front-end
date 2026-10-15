@@ -1,18 +1,38 @@
 ---
 import Layout from "../layout/Layout.astro";
-import HeroSection from "../components/HeroSection.astro"
-import AboutExtended from "../components/Preact/AboutExtended.tsx";
-import ContactDetails from "../components/Contact/ContactDetails.astro";
+import HeroSection from "../components/HeroSection.astro";
 import About from "../components/About.astro";
-import ClientsSection from "../components/ClientsSection.tsx"
-import ArquiteturaModular from "../components/Preact/ArquiteturaModular";
+import Servicos from "../components/Servicos.astro";
+import Produtos from "../components/Produtos.astro";
+import CrmShowcase from "../components/CrmShowcase.astro";
+import Clientes from "../components/Clientes.astro";
+import Contato from "../components/Contato.astro";
+
+const organization = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Scalyns",
+  url: "https://scalyns.com",
+  logo: "https://scalyns.com/logo_scalyns.png",
+  email: "commercial@scalyns.com",
+  sameAs: ["https://instagram.com/scalyns.tech"],
+  contactPoint: [
+    {
+      "@type": "ContactPoint",
+      telephone: "+5527992627793",
+      contactType: "sales",
+      availableLanguage: ["pt-BR", "en"],
+    },
+  ],
+};
 ---
 
-<Layout>
-	<HeroSection />
-	<About />
-	<AboutExtended client:visible />
-	<ArquiteturaModular client:visible />
-	<ClientsSection client:visible/>
-	<ContactDetails />
+<Layout lang="pt" altPath="/en/" structuredData={[organization]}>
+  <HeroSection lang="pt" />
+  <About lang="pt" />
+  <Servicos lang="pt" />
+  <Produtos lang="pt" />
+  <CrmShowcase lang="pt" />
+  <Clientes lang="pt" />
+  <Contato lang="pt" source="site-home" />
 </Layout>

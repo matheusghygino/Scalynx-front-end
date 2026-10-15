@@ -1,93 +1,11 @@
 ---
 import Layout from "../layout/Layout.astro";
+import ThanksContent from "../components/ThanksContent.astro";
+import { useTranslations } from "../i18n/ui";
 
-/**
- * thanks.astro — página de agradecimento da Scalyns
- * Aceita ?name=...&leadId=...&source=...
- */
-export const prerender = true;
-
-const url = new URL(Astro.request.url);
-const name   = url.searchParams.get("name")?.trim()   || "";
-const leadId = url.searchParams.get("leadId")?.trim() || "";
-const source = url.searchParams.get("source")?.trim() || "";
-
-const title = name ? `Obrigado, ${name}!` : "Obrigado!";
-const subtitle = "Recebemos sua mensagem. Nosso time entrará em contato em breve.";
-
-// Metadados (se o Layout utilizar)
-const page = {
-  title,
-  description: "Obrigado por entrar em contato com a Scalyns. Em breve retornaremos.",
-  robots: "noindex,follow",
-};
-
-const brand = {
-  logo: "/logo_scalyns.png",  // coloque o arquivo em /public
-  whatsapp: "+5527992627793",    // E.164 somente dígitos
-};
+const t = useTranslations("pt");
 ---
 
-<Layout {page}>
-  <main class="min-h-[70vh] py-10 md:py-16 px-6 flex items-center justify-center">
-    <section
-      class="w-full max-w-3xl relative overflow-hidden rounded-2xl border border-white/10
-             bg-gradient-to-b from-zinc-400 to-primary shadow-2xl text-neutral-50 mt-28"
-    >
-      <!-- Header / Badge -->
-      <div class="px-6 py-4 border-b border-white/10 flex items-center gap-3">
-        <img
-          src={brand.logo}
-          alt="Logo da Scalyns"
-          class="h-16 w-auto"
-          loading="eager"
-          fetchpriority="high"
-        />
-        <span class="text-xs uppercase tracking-wider text-neutral-300/80">
-          Confirmação
-        </span>
-      </div>
-
-      <!-- Content -->
-      <div class="px-6 md:px-10 py-10 flex flex-col items-center text-center">
-        <div
-          class="mb-6 inline-flex items-center justify-center rounded-full border border-emerald-500/40
-                 bg-emerald-500/10 px-4 py-2 text-emerald-300 text-sm"
-        >
-          Solicitação recebida
-        </div>
-
-        <h1 class="text-3xl md:text-4xl font-bold tracking-tight">{title}</h1>
-        <p class="mt-3 text-lg text-neutral-200">{subtitle}</p>
-
-        {leadId && (
-          <p class="mt-2 text-sm text-neutral-300">
-            ID de referência: <code class="text-neutral-100">{leadId}</code>
-          </p>
-        )}
-        {source && (
-          <p class="mt-1 text-xs text-neutral-400">Origem: {source}</p>
-        )}
-
-        <a
-          href="/"
-          class="mt-4 text-sm text-neutral-300 hover:text-neutral-50 underline underline-offset-4"
-        >
-          Voltar para a página inicial
-        </a>
-
-        <p class="mt-8 text-xs text-neutral-300">
-          Precisa de atendimento imediato?
-          <a
-            href={`https://wa.me/${brand.whatsapp}`}
-            class="underline hover:text-neutral-50 ml-1"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Fale conosco no WhatsApp
-          </a>.
-        </p>
-      </div>
-    </section>
-  </main>
+<Layout lang="pt" title={t.meta.thanksTitle} description={t.meta.thanksDescription} robots="noindex,follow" altPath="/en/thanks">
+  <ThanksContent lang="pt" />
 </Layout>

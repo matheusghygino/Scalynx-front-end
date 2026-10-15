@@ -1,0 +1,41 @@
+---
+interface Props {
+  url: string;
+  label?: string;
+  monograma?: string;
+  cor?: string;
+  imagem?: string;
+  alt?: string;
+}
+
+const { url, label, monograma = "•", cor = "#3b82f6", imagem = "", alt = "" } = Astro.props;
+
+const displayUrl = url.replace(/^https?:\/\//, "").replace(/\/$/, "");
+---
+
+<div class="overflow-hidden rounded-xl border border-white/10 bg-[#0e1326] shadow-xl shadow-black/40">
+  <div class="flex items-center gap-3 border-b border-white/5 px-3 py-2">
+    <div class="flex gap-1.5">
+      <span class="size-2 rounded-full bg-red-400/70"></span>
+      <span class="size-2 rounded-full bg-amber-400/70"></span>
+      <span class="size-2 rounded-full bg-emerald-400/70"></span>
+    </div>
+    <div class="flex min-w-0 flex-1 items-center gap-1.5 rounded-md bg-white/5 px-2.5 py-1 text-[11px] text-white/55">
+      <svg viewBox="0 0 24 24" class="size-3 shrink-0 fill-none stroke-current" stroke-width="2"><rect x="4" y="10" width="16" height="11" rx="2"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3"></path></svg>
+      <span class="truncate">{displayUrl}</span>
+    </div>
+  </div>
+  {
+    imagem ? (
+      <img src={imagem} alt={alt || label || displayUrl} class="aspect-[16/10] w-full object-cover object-top" loading="lazy" decoding="async" />
+    ) : (
+      <div class="relative flex aspect-[16/10] w-full items-center justify-center overflow-hidden" style={`background:linear-gradient(135deg, ${cor}33 0%, #0e1326 60%)`}>
+        <div class="absolute inset-0 opacity-[0.07]" style={`background:radial-gradient(circle at 30% 20%, ${cor} 0%, transparent 55%)`}></div>
+        <div class="relative flex flex-col items-center gap-3 px-6 text-center">
+          <span class="flex size-14 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-base font-bold tracking-wide" style={`color:${cor}`}>{monograma}</span>
+          <span class="max-w-[220px] truncate text-xs text-white/45">{label || displayUrl}</span>
+        </div>
+      </div>
+    )
+  }
+</div>

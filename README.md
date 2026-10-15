@@ -1,47 +1,66 @@
-# Astro Starter Kit: Minimal
+# Scalyns — Site institucional
 
-```sh
-npm create astro@latest -- --template minimal
-```
+Site da Scalyns (Astro 5 + Tailwind CSS v4), com versões em português e inglês,
+mockups do CRM, cases de clientes e formulário de contato próprio.
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/minimal)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/minimal)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/minimal/devcontainer.json)
+## Comandos
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+| Comando           | Ação                                   |
+| :---------------- | :------------------------------------- |
+| `npm install`     | Instala as dependências                |
+| `npm run dev`     | Servidor local em `localhost:4321`     |
+| `npm run build`   | Gera o site estático em `./dist/`      |
+| `npm run preview` | Prévia local do build de produção      |
 
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
+## Estrutura
 
 ```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+src/
+├── i18n/ui.ts            # Textos em PT e EN + dados de contato
+├── data/
+│   ├── produtos.ts       # Cards da Plataforma Scalyns (CRM, ERP, Workspace)
+│   └── clientes.ts       # Cases de clientes (JSM, FS, EB)
+├── components/           # Seções e blocos visuais (mockups, header, footer...)
+├── layout/Layout.astro   # SEO, hreflang, detecção de idioma
+└── pages/
+    ├── index.astro       # Home (PT)
+    ├── crm.astro         # Página do CRM (PT)
+    ├── thanks.astro      # Obrigado (noindex)
+    └── en/               # Versões em inglês das mesmas páginas
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## Idioma
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+- O idioma padrão é detectado pelo navegador (`navigator.language`) na primeira visita
+  e salvo em `localStorage` (`scalyns_lang`).
+- O seletor PT/EN no header e no footer grava a preferência.
+- Links podem forçar o idioma com `?lang=pt` ou `?lang=en`.
 
-Any static assets, like images, can be placed in the `public/` directory.
+## Como adicionar fotos
 
-## 🧞 Commands
+Os mockups em código podem ser substituídos por imagens reais:
 
-All commands are run from the root of the project, from a terminal:
+1. **Sites dos clientes:** coloque os prints em `public/clientes/` (ex.: `public/clientes/jsm.jpg`)
+   e preencha `preview: "/clientes/jsm.jpg"` no cliente correspondente em `src/data/clientes.ts`.
+   O componente `BrowserFrame` já exibe a imagem dentro da moldura de navegador.
+2. **Vídeo de demonstração do CRM:** quando o vídeo estiver pronto, incorpore-o na seção
+   `docs`/home adicionando um bloco de embed na seção do CRM (`CrmShowcase.astro`).
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+## Como adicionar um novo software à Plataforma
 
-## 👀 Want to learn more?
+Edite `src/data/produtos.ts` e adicione uma entrada usando uma das chaves de texto de
+`src/i18n/ui.ts` (seção `platform`). Produtos com `status: "soon"` mostram o selo
+"Em breve" e o botão de lista de espera; `status: "available"` destaca o card com CTA.
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+## Formulário de contato
+
+O formulário posta para o Worker `lead-gateway` (Cloudflare) com Cloudflare Turnstile e
+envia eventos para o GTM. O campo `source` diferencia a origem do lead
+(`site-home`, `crm-demo`, `waitlist-erp`, `waitlist-workspace`), e os botões de
+demonstração/lista de espera pré-preenchem o assunto automaticamente.
+
+## Deploy (VPS)
+
+1. `npm ci && npm run build`
+2. Publique o conteúdo de `dist/` no seu servidor (nginx, Caddy ou o proxy já usado na VPS).
+3. O site é 100% estático — não requer runtime Node em produção.

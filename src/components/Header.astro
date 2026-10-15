@@ -1,90 +1,72 @@
 ---
 import { Image } from "astro:assets";
 import logo from "../assets/logo_scalyns.png";
+import { languages, useTranslations, type Lang } from "../i18n/ui";
+
+interface Props {
+  lang?: Lang;
+  currentPath?: string;
+}
+
+const { lang = "pt", currentPath = "/" } = Astro.props;
+const t = useTranslations(lang);
+const home = languages[lang].homePath;
+
+const enPath = lang === "pt" ? (currentPath === "/" ? "/en/" : `/en${currentPath}`) : currentPath;
+const ptPath = lang === "en" ? (currentPath.replace(/^\/en/, "") || "/") : currentPath;
 
 const links = [
-  { href: "#sobre", label: "Sobre" },
-  { href: "#metodologia", label: "Como Trabalhamos" },
-  { href: "#ecossistema", label: "Ecossistema" },
-  { href: "#clientes", label: "Clientes" },
+  { href: `${home}#sobre`, label: t.nav.about },
+  { href: `${home}#servicos`, label: t.nav.services },
+  { href: lang === "pt" ? "/crm" : "/en/crm", label: t.nav.crm },
+  { href: `${home}#clientes`, label: t.nav.clients },
 ];
 ---
 
 <header
   id="siteHeader"
-  class="fixed top-0 left-0 w-full z-50 shadow bg-opacity-90 backdrop-blur transition-transform duration-300 -translate-y-0 px-4 md:px-20 bg-gradient-to-r from-primary to-secondary"
+  class="fixed left-0 top-0 z-50 w-full bg-gradient-to-r from-primary to-secondary shadow-lg shadow-black/20 transition-transform duration-300"
 >
-  <div class="container mx-auto flex justify-between items-center py-4">
-    <a href="/">
-      <Image
-        src={logo}
-        alt="Scalyns"
-        width={210}
-        height={64}
-        format="avif"
-        quality={80}
-        class="h-16 md:h-20"
-      />
+  <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 md:px-6">
+    <a href={home} class="flex items-center" aria-label="Scalyns">
+      <Image src={logo} alt="Scalyns" width={210} height={64} format="avif" quality={80} class="h-11 w-auto md:h-12" />
     </a>
 
-    <!-- Botão hambúrguer -->
     <button
       id="menuButton"
-      class="md:hidden focus:outline-none z-50"
+      class="z-50 focus:outline-none md:hidden"
       aria-controls="mobileMenu"
       aria-expanded="false"
+      aria-label={t.nav.menu}
     >
-      <svg
-        id="menuIcon"
-        class="w-6 h-6 text-white"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path
-          id="menuIconBars"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M4 6h16M4 12h16M4 18h16"></path>
+      <svg id="menuIcon" class="h-7 w-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
       </svg>
     </button>
 
-    <!-- Desktop -->
-    <nav class="hidden md:flex space-x-10 items-center text-base font-semibold">
-      {
-        links.map((link) => (
-          <a href={link.href} class="hover:text-terciary transition-colors">
-            {link.label}
-          </a>
-        ))
-      }
-      <a
-        href="#contato"
-        class="bg-primary text-white px-5 py-2 rounded-full hover:bg-secondary transition"
-        >Solicitar Proposta</a
-      >
+    <nav class="hidden items-center gap-7 text-sm font-semibold md:flex" aria-label="Principal">
+      {links.map((link) => <a href={link.href} class="text-white/85 transition-colors hover:text-white">{link.label}</a>)}
+      <div class="flex items-center gap-1 rounded-full border border-white/20 p-0.5" aria-label={t.nav.languageLabel}>
+        <a href={`${ptPath}?lang=pt`} data-set-lang="pt" aria-current={lang === "pt" ? "true" : undefined} class={`rounded-full px-2.5 py-1 text-xs transition ${lang === "pt" ? "bg-white text-primary" : "text-white/70 hover:text-white"}`}>PT</a>
+        <a href={`${enPath}?lang=en`} data-set-lang="en" aria-current={lang === "en" ? "true" : undefined} class={`rounded-full px-2.5 py-1 text-xs transition ${lang === "en" ? "bg-white text-primary" : "text-white/70 hover:text-white"}`}>EN</a>
+      </div>
+      <a href={`${home}#contato`} class="rounded-full bg-white px-5 py-2 font-semibold text-primary transition hover:bg-gray-100">
+        {t.nav.cta}
+      </a>
     </nav>
   </div>
 
-  <!-- Mobile -->
   <div
     id="mobileMenu"
-    class="fixed top-0 left-0 w-full h-screen -translate-x-full opacity-0 bg-gradient-to-r from-primary to-secondary text-white z-40 flex flex-col items-center justify-center text-lg font-semibold transition-all duration-500 ease-in-out"
+    class="fixed left-0 top-0 z-40 flex h-screen w-full -translate-x-full flex-col items-center justify-center bg-gradient-to-b from-primary to-secondary text-white opacity-0 transition-all duration-500 ease-in-out md:hidden"
   >
-    <nav class="flex flex-col space-y-6 text-center">
-      {
-        links.map((link) => (
-          <a href={link.href} class="mobile-link hover:text-secondary">
-            {link.label}
-          </a>
-        ))
-      }
-      <a
-        href="#contato"
-        class="mobile-link px-6 py-2 rounded-full bg-white/10 hover:bg-white/20 transition"
-        >Solicitar Proposta</a
-      >
+    <nav class="flex flex-col items-center space-y-6 text-center text-lg font-semibold">
+      {links.map((link) => <a href={link.href} class="mobile-link">{link.label}</a>)}
+      <a href={`${home}#contato`} class="mobile-link rounded-full bg-white/10 px-6 py-2 transition hover:bg-white/20">{t.nav.cta}</a>
+      <div class="flex items-center gap-2 pt-2 text-sm">
+        <a href={`${ptPath}?lang=pt`} data-set-lang="pt" class={`rounded-full px-4 py-1.5 ${lang === "pt" ? "bg-white text-primary" : "border border-white/30 text-white/80"}`}>PT</a>
+        <a href={`${enPath}?lang=en`} data-set-lang="en" class={`rounded-full px-4 py-1.5 ${lang === "en" ? "bg-white text-primary" : "border border-white/30 text-white/80"}`}>EN</a>
+      </div>
     </nav>
   </div>
 </header>
@@ -94,75 +76,79 @@ const links = [
     const header = document.getElementById("siteHeader");
     const menuButton = document.getElementById("menuButton");
     const mobileMenu = document.getElementById("mobileMenu");
-    const mobileLinks = mobileMenu?.querySelectorAll('a[href^="#"]') || [];
+    const mobileLinks = mobileMenu?.querySelectorAll("a") || [];
     let lastScrollY = window.scrollY;
     let isHidden = false;
     let isMenuOpen = false;
 
-    // Helpers abrir/fechar menu
     function openMobileMenu() {
-      mobileMenu.classList.remove("-translate-x-full", "opacity-0");
-      mobileMenu.classList.add("translate-x-0", "opacity-100");
-      menuButton.setAttribute("aria-expanded", "true");
+      mobileMenu?.classList.remove("-translate-x-full", "opacity-0");
+      mobileMenu?.classList.add("translate-x-0", "opacity-100");
+      menuButton?.setAttribute("aria-expanded", "true");
       document.body.style.overflow = "hidden";
       isMenuOpen = true;
     }
+
     function closeMobileMenu() {
-      mobileMenu.classList.add("-translate-x-full", "opacity-0");
-      mobileMenu.classList.remove("translate-x-0", "opacity-100");
-      menuButton.setAttribute("aria-expanded", "false");
+      mobileMenu?.classList.add("-translate-x-full", "opacity-0");
+      mobileMenu?.classList.remove("translate-x-0", "opacity-100");
+      menuButton?.setAttribute("aria-expanded", "false");
       document.body.style.overflow = "";
       isMenuOpen = false;
     }
-    function toggleMobileMenu() {
-      isMenuOpen ? closeMobileMenu() : openMobileMenu();
-    }
 
-    // Esconde header ao rolar
     window.addEventListener("scroll", () => {
       const scrollY = window.scrollY;
-      if (scrollY > lastScrollY && scrollY > 100 && !isHidden) {
-        header.classList.add("-translate-y-full");
+      if (scrollY > lastScrollY && scrollY > 140 && !isHidden) {
+        header?.classList.add("-translate-y-full");
         isHidden = true;
       } else if (scrollY < lastScrollY && isHidden) {
-        header.classList.remove("-translate-y-full");
+        header?.classList.remove("-translate-y-full");
         isHidden = false;
       }
       lastScrollY = scrollY;
     });
 
-    // Mostra header ao levar mouse ao topo (desktop)
-    document.addEventListener("mousemove", (e) => {
-      if (e.clientY < 50) {
-        header.classList.remove("-translate-y-full");
+    document.addEventListener("mousemove", (event) => {
+      if (event.clientY < 60) {
+        header?.classList.remove("-translate-y-full");
         isHidden = false;
       }
     });
 
-    // Toggle pelo botão
-    if (menuButton && mobileMenu) {
-      menuButton.addEventListener("click", toggleMobileMenu);
-    }
+    menuButton?.addEventListener("click", () => (isMenuOpen ? closeMobileMenu() : openMobileMenu()));
 
-    // Clique nos links do menu mobile: fecha + scroll suave
-    mobileLinks.forEach((a) => {
-      a.addEventListener("click", (e) => {
-        const href = a.getAttribute("href");
-        if (!href || !href.startsWith("#")) return;
-        const target = document.querySelector(href);
-        if (!target) return;
-
-        e.preventDefault();
-        // fecha o menu antes de rolar
+    mobileLinks.forEach((link) => {
+      link.addEventListener("click", (event) => {
+        const href = link.getAttribute("href") || "";
+        const hash = href.includes("#") ? href.split("#")[1] : "";
+        if (!hash) return;
+        let samePage = href.startsWith("#");
+        try {
+          samePage = samePage || new URL(href, location.href).pathname === location.pathname;
+        } catch {
+          samePage = true;
+        }
+        if (!samePage) return;
+        event.preventDefault();
         closeMobileMenu();
-        // espera a transição do menu para rolar (combine com duration-500)
-        setTimeout(() => {
-          target.scrollIntoView({ behavior: "smooth", block: "start" });
-        }, 250);
+        window.setTimeout(() => {
+          document.getElementById(hash)?.scrollIntoView({ behavior: "smooth", block: "start" });
+          history.replaceState(null, "", `${location.pathname}#${hash}`);
+        }, 260);
       });
     });
 
-    // Fechar ao mudar o hash (fallback)
+    document.querySelectorAll("[data-set-lang]").forEach((el) => {
+      el.addEventListener("click", () => {
+        try {
+          localStorage.setItem("scalyns_lang", el.getAttribute("data-set-lang") || "pt");
+        } catch {
+          /* storage may be unavailable */
+        }
+      });
+    });
+
     window.addEventListener("hashchange", () => {
       if (isMenuOpen) closeMobileMenu();
     });
@@ -172,9 +158,9 @@ const links = [
 <style>
   html {
     scroll-behavior: smooth;
-    scroll-padding-top: 100px;
+    scroll-padding-top: 90px;
   }
   section {
-    scroll-margin-top: 100px;
+    scroll-margin-top: 90px;
   }
 </style>

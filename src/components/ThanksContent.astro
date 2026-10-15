@@ -1,0 +1,67 @@
+---
+import { whatsapp, useTranslations, type Lang } from "../i18n/ui";
+
+interface Props {
+  lang?: Lang;
+}
+
+const { lang = "pt" } = Astro.props;
+const t = useTranslations(lang);
+const message = lang === "pt" ? whatsapp.messagePt : whatsapp.messageEn;
+const whatsappHref = `${whatsapp.link}?text=${encodeURIComponent(message)}`;
+---
+
+<main class="flex min-h-[70vh] items-center justify-center px-6 py-10 md:py-16">
+  <section class="relative mt-24 w-full max-w-3xl overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-[#1b2145] to-primary text-neutral-50 shadow-2xl">
+    <div class="flex items-center gap-3 border-b border-white/10 px-6 py-4">
+      <img src="/logo_scalyns.png" alt="Scalyns" class="h-16 w-auto" loading="eager" fetchpriority="high" />
+      <span class="text-xs uppercase tracking-wider text-neutral-300/80">{t.thanks.badge}</span>
+    </div>
+
+    <div class="flex flex-col items-center px-6 py-10 text-center md:px-10">
+      <div class="mb-6 inline-flex items-center justify-center rounded-full border border-emerald-500/40 bg-emerald-500/10 px-4 py-2 text-sm text-emerald-300">
+        {t.thanks.badge}
+      </div>
+
+      <h1 class="text-3xl font-bold tracking-tight md:text-4xl" data-thanks-title>{t.thanks.title}</h1>
+      <p class="mt-3 text-lg text-neutral-200">{t.thanks.subtitle}</p>
+
+      <p class="mt-2 hidden text-sm text-neutral-300" data-thanks-reference></p>
+      <p class="mt-1 hidden text-xs text-neutral-400" data-thanks-source></p>
+
+      <a href={lang === "pt" ? "/" : "/en/"} class="mt-4 text-sm text-neutral-300 underline underline-offset-4 hover:text-neutral-50">
+        {t.thanks.back}
+      </a>
+
+      <p class="mt-8 text-xs text-neutral-300">
+        {t.thanks.urgent}
+        <a href={whatsappHref} class="ml-1 underline hover:text-neutral-50" target="_blank" rel="noopener noreferrer">{t.thanks.whatsapp}</a>.
+      </p>
+    </div>
+  </section>
+</main>
+
+<script define:vars={{ namedTitle: t.thanks.titleNamed, referenceLabel: t.thanks.reference, sourceLabel: t.thanks.source }}>
+  (function () {
+    try {
+      const params = new URLSearchParams(location.search);
+      const name = (params.get("name") || "").trim();
+      const leadId = (params.get("leadId") || "").trim();
+      const source = (params.get("source") || "").trim();
+
+      if (name) document.querySelector("[data-thanks-title]")?.replaceChildren(`${namedTitle}, ${name}!`);
+
+      const reference = document.querySelector("[data-thanks-reference]");
+      if (reference && leadId) {
+        reference.replaceChildren(`${referenceLabel}: ${leadId}`);
+        reference.classList.remove("hidden");
+      }
+
+      const sourceEl = document.querySelector("[data-thanks-source]");
+      if (sourceEl && source) {
+        sourceEl.replaceChildren(`${sourceLabel}: ${source}`);
+        sourceEl.classList.remove("hidden");
+      }
+    } catch (error) {}
+  })();
+</script>

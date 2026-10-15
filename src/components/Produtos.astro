@@ -1,0 +1,72 @@
+---
+import { produtos } from "../data/produtos";
+import { useTranslations, languages, type Lang } from "../i18n/ui";
+
+interface Props {
+  lang?: Lang;
+}
+
+const { lang = "pt" } = Astro.props;
+const t = useTranslations(lang);
+const home = languages[lang].homePath;
+
+const crmPath = lang === "pt" ? "/crm" : "/en/crm";
+
+const icons: Record<string, string> = {
+  crm: '<rect x="3" y="4" width="5" height="16" rx="1.5"></rect><rect x="9.5" y="4" width="5" height="11" rx="1.5"></rect><rect x="16" y="4" width="5" height="7" rx="1.5"></rect>',
+  erp: '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"></path>',
+  workspace: '<path d="m12 3 9 5-9 5-9-5 9-5Z"></path><path d="m3 13 9 5 9-5"></path>',
+};
+---
+
+<section id="plataforma" class="bg-surface py-16 lg:py-24">
+  <div class="mx-auto max-w-6xl px-6">
+    <div class="mx-auto max-w-3xl text-center">
+      <span class="text-xs font-semibold uppercase tracking-[0.2em] text-fuchsia-400">{t.platform.eyebrow}</span>
+      <h2 class="mt-3 font-title text-3xl text-white md:text-4xl">{t.platform.title}</h2>
+      <p class="mt-5 text-base leading-relaxed text-white/70 md:text-lg">{t.platform.subtitle}</p>
+    </div>
+
+    <div class="mt-12 grid gap-6 md:grid-cols-3">
+      {produtos.map((produto) => {
+        const available = produto.status === "available";
+        const name = t.platform[produto.nameKey];
+        const description = t.platform[produto.descriptionKey];
+        const cta = t.platform[produto.ctaKey];
+        const href = produto.id === "crm" ? crmPath : `${home}#contato`;
+        return (
+          <article class={`relative flex flex-col rounded-2xl border p-7 transition duration-300 ${available ? "border-sky-500/40 bg-gradient-to-b from-sky-500/[0.12] to-transparent shadow-xl shadow-sky-950/30 hover:-translate-y-1" : "border-white/10 bg-white/[0.04] hover:border-white/20"}`}>
+            <div class="flex items-start justify-between gap-3">
+              <span class={`flex size-12 items-center justify-center rounded-xl ${available ? "bg-sky-500/20 text-sky-300" : "bg-white/5 text-white/50"}`}>
+                <svg viewBox="0 0 24 24" class="size-6 fill-none stroke-current" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" set:html={icons[produto.icon]} />
+              </span>
+              <span class={`rounded-full px-3 py-1 text-[11px] font-semibold ${available ? "bg-emerald-500/15 text-emerald-400" : "bg-white/5 text-white/50"}`}>
+                {available ? t.platform.statusAvailable : t.platform.statusSoon}
+              </span>
+            </div>
+
+            <h3 class="mt-5 text-xl font-semibold text-white">{name}</h3>
+            <p class="mt-3 flex-1 text-sm leading-relaxed text-white/70">{description}</p>
+
+            <div class="mt-6 flex flex-wrap items-center gap-3">
+              {available ? (
+                <>
+                  <a href={href} class="rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-primary transition hover:bg-gray-100">{cta}</a>
+                  {produto.demo ? (
+                    <button type="button" data-demo-cta class="rounded-full border border-white/25 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10">
+                      {t.platform.crmDemoCta}
+                    </button>
+                  ) : null}
+                </>
+              ) : (
+                <button type="button" data-waitlist={produto.waitlistSource} class="rounded-full border border-white/25 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10">
+                  {cta}
+                </button>
+              )}
+            </div>
+          </article>
+        );
+      })}
+    </div>
+  </div>
+</section>

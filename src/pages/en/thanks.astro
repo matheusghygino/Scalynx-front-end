@@ -1,0 +1,11 @@
+---
+import Layout from "../../layout/Layout.astro";
+import ThanksContent from "../../components/ThanksContent.astro";
+import { useTranslations } from "../../i18n/ui";
+
+const t = useTranslations("en");
+---
+
+<Layout lang="en" title={t.meta.thanksTitle} description={t.meta.thanksDescription} robots="noindex,follow" altPath="/thanks">
+  <ThanksContent lang="en" />
+</Layout>

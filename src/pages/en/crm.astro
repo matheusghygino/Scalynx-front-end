@@ -1,0 +1,37 @@
+---
+import Layout from "../../layout/Layout.astro";
+import CrmPageContent from "../../components/CrmPageContent.astro";
+import { useTranslations } from "../../i18n/ui";
+
+const t = useTranslations("en");
+
+const organization = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Scalyns",
+  url: "https://scalyns.com",
+  logo: "https://scalyns.com/logo_scalyns.png",
+  email: "commercial@scalyns.com",
+  sameAs: ["https://instagram.com/scalyns.tech"],
+};
+
+const softwareApp = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: "Scalyns CRM",
+  applicationCategory: "BusinessApplication",
+  operatingSystem: "Web",
+  description: t.meta.crmDescription,
+  offers: { "@type": "Offer", price: "0", description: "Demo on request" },
+};
+---
+
+<Layout
+  lang="en"
+  title={t.meta.crmTitle}
+  description={t.meta.crmDescription}
+  altPath="/crm"
+  structuredData={[organization, softwareApp]}
+>
+  <CrmPageContent lang="en" />
+</Layout>

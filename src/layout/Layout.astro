@@ -5,72 +5,155 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import ScrollToTopBtn from "../components/usables/ScrollToTopBtn.astro";
 import PostHog from "../components/posthog.astro";
+import { htmlLang, useTranslations, type Lang } from "../i18n/ui";
+
+interface Props {
+  lang?: Lang;
+  title?: string;
+  description?: string;
+  robots?: string;
+  ogImage?: string;
+  ogType?: string;
+  altPath?: string;
+  structuredData?: Record<string, unknown>[];
+}
+
+const {
+  lang = "pt",
+  title,
+  description = "",
+  robots = "index,follow",
+  ogImage = "/HeroBackground.png",
+  ogType = "website",
+  altPath,
+  structuredData = [],
+} = Astro.props;
+
+const t = useTranslations(lang);
+const meta = t.meta;
+
+const pageTitle = title ?? meta.homeTitle;
+const pageDescription = description || meta.homeDescription;
+
+const site = Astro.site ?? new URL("https://scalyns.com");
+const currentPath = Astro.url.pathname.endsWith("/") && Astro.url.pathname !== "/" ? Astro.url.pathname.slice(0, -1) : Astro.url.pathname;
+const canonical = new URL(currentPath || "/", site).toString();
+
+const ptPath = lang === "pt" ? currentPath : (altPath ?? "/");
+const enPath = lang === "en" ? currentPath : (altPath ?? "/en/");
 ---
 
-<html lang="pt-br" class="scroll-smooth">
+<!doctype html>
+<html lang={htmlLang(lang)} data-lang={lang} class="scroll-smooth">
   <head>
-
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>Scalyns - Marketing Digital & Automação</title>
+    <script is:inline>
+      (function () {
+        try {
+          var here = document.documentElement.getAttribute("data-lang");
+          var forced = new URLSearchParams(location.search).get("lang");
+          var stored = null;
+          try { stored = localStorage.getItem("scalyns_lang"); } catch (error) {}
+          var target = forced || stored;
+          if (!target) {
+            var nav = (navigator.language || "en").toLowerCase();
+            target = nav.indexOf("pt") === 0 ? "pt" : "en";
+          }
+          if (target !== "pt" && target !== "en") return;
+          try { localStorage.setItem("scalyns_lang", target); } catch (error) {}
+          if (target === here) return;
+          var path = location.pathname;
+          var next;
+          if (target === "en") {
+            next = path.indexOf("/en") === 0 ? path : path === "/" ? "/en/" : "/en" + path;
+          } else {
+            next = path.indexOf("/en") === 0 ? path.replace(/^\/en/, "") || "/" : path;
+          }
+          location.replace(next + location.hash);
+        } catch (error) {}
+      })();
+    </script>
 
-    <!-- Preconnect -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://www.googletagmanager.com">
-    <link rel="preconnect" href="https://us.i.posthog.com">
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDescription} />
+    <meta name="robots" content={robots} />
+    <link rel="canonical" href={canonical} />
 
-    <!-- Fonts (non render blocking) -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/logo_scalyns.png" />
+    <meta name="theme-color" content="#121624" />
+
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content="Scalyns" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL(ogImage, site).toString()} />
+    <meta property="og:locale" content={lang === "pt" ? "pt_BR" : "en_US"} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={pageDescription} />
+    <meta name="twitter:image" content={new URL(ogImage, site).toString()} />
+
+    <link rel="alternate" hreflang="pt-BR" href={new URL(ptPath, site).toString()} />
+    <link rel="alternate" hreflang="en" href={new URL(enPath, site).toString()} />
+    <link rel="alternate" hreflang="x-default" href={new URL(ptPath, site).toString()} />
+
+    {structuredData.map((data) => (
+      <script type="application/ld+json" set:html={JSON.stringify(data)} />
+    ))}
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://www.googletagmanager.com" />
+    <link rel="preconnect" href="https://us.i.posthog.com" />
+
     <link
       rel="preload"
       as="style"
-      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Poppins:wght@400;500;600&display=swap"
       onload="this.onload=null;this.rel='stylesheet'"
     />
 
     <noscript>
       <link
         rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Poppins:wght@400;500;600&display=swap"
       />
     </noscript>
 
-    <!-- Google Tag Manager (lazy load) -->
     <script is:inline>
       window.addEventListener("load", () => {
         const gtmScript = document.createElement("script");
-        gtmScript.src =
-          "https://www.googletagmanager.com/gtm.js?id=GTM-TP3R9QKS";
+        gtmScript.src = "https://www.googletagmanager.com/gtm.js?id=GTM-TP3R9QKS";
         gtmScript.async = true;
         document.head.appendChild(gtmScript);
       });
     </script>
 
     <PostHog />
-
   </head>
 
-  <body class="bg-bg text-t-primary font-body">
-
-    <!-- GTM fallback -->
+  <body class="bg-bg text-t-primary font-body antialiased">
     <noscript>
       <iframe
         src="https://www.googletagmanager.com/ns.html?id=GTM-TP3R9QKS"
         height="0"
         width="0"
-        style="display:none;visibility:hidden"
-      ></iframe>
+        style="display:none;visibility:hidden"></iframe>
     </noscript>
 
-    <Header />
+    <Header lang={lang} currentPath={currentPath} />
 
     <main id="main-content">
       <slot />
     </main>
 
-    <Footer />
-    <ScrollToTopBtn />
+    <Footer lang={lang} />
 
+    <ScrollToTopBtn lang={lang} />
   </body>
 </html>

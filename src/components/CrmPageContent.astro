@@ -1,0 +1,163 @@
+---
+import AppMockup from "./usables/AppMockup.astro";
+import ContactForm from "./Contact/ContactForm.astro";
+import { useTranslations, whatsapp, type Lang } from "../i18n/ui";
+
+interface Props {
+  lang?: Lang;
+}
+
+const { lang = "pt" } = Astro.props;
+const t = useTranslations(lang);
+const page = t.crmPage;
+const message = lang === "pt" ? whatsapp.messagePt : whatsapp.messageEn;
+const whatsappHref = `${whatsapp.link}?text=${encodeURIComponent(message)}`;
+
+const integrationBadges = [
+  { label: "Google Calendar", color: "#4285F4" },
+  { label: "Google Ads", color: "#34A853" },
+  { label: "Google Analytics", color: "#FBBC05" },
+  { label: "Slack", color: "#611f69" },
+  { label: "Jobber", color: "#0ea5e9" },
+  { label: "Quo", color: "#8b5cf6" },
+  { label: lang === "pt" ? "E-mail" : "Email", color: "#f43f5e" },
+  { label: "SMS", color: "#10b981" },
+];
+---
+
+<section class="relative overflow-hidden bg-gradient-to-br from-primary via-[#1b2145] to-secondary pb-16 pt-28 text-white md:pb-20 md:pt-36">
+  <div class="pointer-events-none absolute -left-40 top-10 size-[420px] rounded-full bg-emerald-500/10 blur-3xl" aria-hidden="true"></div>
+  <div class="mx-auto grid max-w-6xl items-center gap-12 px-6 lg:grid-cols-[1.05fr_1fr]">
+    <div>
+      <span class="inline-flex items-center rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-white/75">{page.eyebrow}</span>
+      <h1 class="mt-6 max-w-xl text-4xl font-title font-bold leading-tight text-white md:text-[2.9rem]">{page.title}</h1>
+      <p class="mt-6 max-w-xl text-base leading-relaxed text-white/80 md:text-lg">{page.subtitle}</p>
+      <div class="mt-8 flex flex-wrap items-center gap-4">
+        <button type="button" data-demo-cta class="rounded-full bg-white px-7 py-3 font-semibold text-primary shadow-lg shadow-black/20 transition hover:-translate-y-0.5 hover:bg-gray-100">
+          {page.ctaPrimary}
+        </button>
+        <a href={whatsappHref} target="_blank" rel="noopener noreferrer" class="rounded-full border border-white/30 px-7 py-3 font-semibold text-white transition hover:bg-white/10">
+          {page.ctaSecondary}
+        </a>
+      </div>
+    </div>
+    <AppMockup lang={lang} />
+  </div>
+</section>
+
+<section class="bg-surface py-16 lg:py-20">
+  <div class="mx-auto max-w-6xl px-6">
+    <h2 class="mx-auto max-w-3xl text-center font-title text-2xl leading-snug text-white md:text-3xl">{page.problemTitle}</h2>
+    <ul class="mt-10 grid gap-4 md:grid-cols-2">
+      {page.problemPoints.map((point) => (
+        <li class="flex items-start gap-3 rounded-2xl border border-red-500/15 bg-red-500/[0.06] p-5 text-sm leading-relaxed text-white/80">
+          <span class="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full bg-red-500/15 text-red-400">
+            <svg viewBox="0 0 24 24" class="size-3.5 fill-none stroke-current" stroke-width="3"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+          </span>
+          {point}
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<section class="py-16 lg:py-20">
+  <div class="mx-auto grid max-w-6xl items-center gap-12 px-6 lg:grid-cols-[1fr_1.05fr]">
+    <div>
+      <h2 class="font-title text-2xl leading-snug text-white md:text-3xl">{page.solutionTitle}</h2>
+      <p class="mt-5 text-base leading-relaxed text-white/75">{page.solutionText}</p>
+      <ul class="mt-6 space-y-2.5 text-sm text-white/75">
+        {t.crmHome.features.slice(0, 3).map((feature) => (
+          <li class="flex items-start gap-2.5">
+            <span class="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-emerald-500/15 text-emerald-400">
+              <svg viewBox="0 0 24 24" class="size-3 fill-none stroke-current" stroke-width="3"><path d="M5 13l4 4L19 7"></path></svg>
+            </span>
+            {feature.title}
+          </li>
+        ))}
+      </ul>
+    </div>
+    <AppMockup lang={lang} />
+  </div>
+</section>
+
+<section class="bg-surface py-16 lg:py-20">
+  <div class="mx-auto max-w-6xl px-6">
+    <h2 class="text-center font-title text-2xl text-white md:text-3xl">{page.featuresTitle}</h2>
+    <ul class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      {page.features.map((feature) => (
+        <li class="rounded-2xl border border-white/10 bg-white/[0.04] p-5 transition hover:border-sky-500/40 hover:bg-white/[0.07]">
+          <span class="flex size-8 items-center justify-center rounded-lg bg-sky-500/15 text-sky-400">
+            <svg viewBox="0 0 24 24" class="size-3.5 fill-none stroke-current" stroke-width="3"><path d="M5 13l4 4L19 7"></path></svg>
+          </span>
+          <h3 class="mt-3 text-sm font-semibold text-white">{feature.title}</h3>
+          <p class="mt-2 text-xs leading-relaxed text-white/60">{feature.description}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<section class="py-16 lg:py-20">
+  <div class="mx-auto max-w-6xl px-6 text-center">
+    <h2 class="font-title text-2xl text-white md:text-3xl">{page.integrationsTitle}</h2>
+    <p class="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-white/70 md:text-base">{page.integrationsText}</p>
+    <div class="mt-8 flex flex-wrap justify-center gap-3">
+      {integrationBadges.map((badge) => (
+        <span class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.05] px-4 py-2 text-sm text-white/80">
+          <span class="size-2 rounded-full" style={`background:${badge.color}`}></span>
+          {badge.label}
+        </span>
+      ))}
+    </div>
+  </div>
+</section>
+
+<section class="bg-surface py-16 lg:py-20">
+  <div class="mx-auto grid max-w-6xl items-center gap-12 px-6 lg:grid-cols-2">
+    <div>
+      <h2 class="font-title text-2xl text-white md:text-3xl">{page.securityTitle}</h2>
+      <ul class="mt-6 space-y-3 text-sm text-white/75">
+        {page.securityPoints.map((point) => (
+          <li class="flex items-start gap-3">
+            <span class="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full bg-sky-500/15 text-sky-400">
+              <svg viewBox="0 0 24 24" class="size-3.5 fill-none stroke-current" stroke-width="2"><path d="M12 3l8 3v6c0 4.4-3.4 7.8-8 9-4.6-1.2-8-4.6-8-9V6l8-3Z"></path></svg>
+            </span>
+            {point}
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <div>
+      <h2 class="font-title text-2xl text-white md:text-3xl">{page.faqTitle}</h2>
+      <div class="mt-6 space-y-3">
+        {page.faq.map((item) => (
+          <details class="group rounded-xl border border-white/10 bg-white/[0.04] p-4">
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-4 text-sm font-semibold text-white">
+              {item.q}
+              <span class="text-white/40 transition group-open:rotate-45">
+                <svg viewBox="0 0 24 24" class="size-4 fill-none stroke-current" stroke-width="2"><path d="M12 5v14M5 12h14"></path></svg>
+              </span>
+            </summary>
+            <p class="mt-3 text-sm leading-relaxed text-white/70">{item.a}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contato" class="py-16 lg:py-24">
+  <div class="mx-auto grid max-w-6xl items-start gap-12 px-6 lg:grid-cols-2">
+    <div class="space-y-6">
+      <h2 class="font-title text-3xl leading-tight text-white md:text-4xl">{page.demoTitle}</h2>
+      <p class="text-sm leading-relaxed text-white/75 md:text-base">{page.demoText}</p>
+      <a href={whatsappHref} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 rounded-full bg-emerald-500/15 px-5 py-2.5 text-sm font-semibold text-emerald-400 transition hover:bg-emerald-500/25">
+        <svg viewBox="0 0 24 24" class="size-4 fill-current"><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-1.7-.1a13 13 0 0 1-6.5-5.8c-.5-.8-.8-1.7-.8-2.5 0-.9.5-1.5 1-1.9.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.4l.8 1.9c.1.2 0 .4-.1.5l-.4.5c-.2.2-.3.3-.1.6a9 9 0 0 0 4 3.4c.3.2.5.1.7-.1l.9-1c.2-.2.4-.2.6-.1l1.9.9c.2.1.4.2.4.3.1.2.1.7-.1 1.1l-.6 1Z"/></svg>
+        {t.contact.whatsappCta}
+      </a>
+    </div>
+    <ContactForm lang={lang} source="crm-demo" title={page.demoFormTitle} />
+  </div>
+</section>

@@ -1,0 +1,38 @@
+---
+import Layout from "../../layout/Layout.astro";
+import HeroSection from "../../components/HeroSection.astro";
+import About from "../../components/About.astro";
+import Servicos from "../../components/Servicos.astro";
+import Produtos from "../../components/Produtos.astro";
+import CrmShowcase from "../../components/CrmShowcase.astro";
+import Clientes from "../../components/Clientes.astro";
+import Contato from "../../components/Contato.astro";
+
+const organization = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Scalyns",
+  url: "https://scalyns.com",
+  logo: "https://scalyns.com/logo_scalyns.png",
+  email: "commercial@scalyns.com",
+  sameAs: ["https://instagram.com/scalyns.tech"],
+  contactPoint: [
+    {
+      "@type": "ContactPoint",
+      telephone: "+5527992627793",
+      contactType: "sales",
+      availableLanguage: ["pt-BR", "en"],
+    },
+  ],
+};
+---
+
+<Layout lang="en" altPath="/" structuredData={[organization]}>
+  <HeroSection lang="en" />
+  <About lang="en" />
+  <Servicos lang="en" />
+  <Produtos lang="en" />
+  <CrmShowcase lang="en" />
+  <Clientes lang="en" />
+  <Contato lang="en" source="site-home-en" />
+</Layout>
