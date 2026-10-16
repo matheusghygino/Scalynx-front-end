@@ -43,3 +43,4 @@ jobs:
             -o StrictHostKeyChecking=yes \
             root@76.13.160.239 \
             /usr/local/bin/deploy-scalyns-site.sh
+
