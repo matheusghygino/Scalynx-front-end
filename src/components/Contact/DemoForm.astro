@@ -132,7 +132,11 @@ const FORM_ID = "site-4";
       widgetId = window.turnstile.render(turnstileContainer, {
         sitekey,
         theme: "auto",
-        callback: (token) => { if (pendingToken) { const resolve = pendingToken; pendingToken = null; resolve(token); } },
+        // reset()/expiry invoke this callback with an empty token; ignore those.
+        callback: (token) => {
+          if (!token) return;
+          if (pendingToken) { const resolve = pendingToken; pendingToken = null; resolve(token); }
+        },
       });
     }
 
@@ -195,6 +199,7 @@ const FORM_ID = "site-4";
 
       try {
         const leadToken = await nextToken();
+        if (!leadToken) { setResult(messages.captcha, "error"); return; }
         const formData = new FormData(form);
         formData.set("cf-turnstile-response", leadToken);
         const submittedAt = form.querySelector('input[name="submittedAt"]');
@@ -216,6 +221,7 @@ const FORM_ID = "site-4";
 
         try {
           const demoToken = await nextToken();
+          if (!demoToken) throw new Error("captcha_not_ready");
           const demoResponse = await fetch(`${demoApi}/api/demo/access`, {
             method: "POST",
             headers: { "content-type": "application/json" },
