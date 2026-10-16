@@ -195,6 +195,10 @@ const ui = {
         thanksUrl: "/thanks",
         privacy: "Ao enviar você aceita ser contatado via e-mail e WhatsApp.",
         demoSubject: "Quero ver uma demonstração do Scalyns CRM",
+        demoNotice: "Você será direcionado para uma demonstração de 1 hora do Scalyns CRM.",
+        demoSubmit: "Solicitar demonstração e testar agora",
+        demoRedirecting: "Preparando sua demonstração...",
+        demoBusy: "Nossa demonstração está temporariamente cheia. Tente novamente em alguns minutos — nosso time entrará em contato.",
         waitlistSubject: "Quero entrar na lista de espera",
         errors: {
           fast: "Envio muito rápido. Preencha o formulário normalmente e tente novamente.",
@@ -451,6 +455,10 @@ const ui = {
         thanksUrl: "/en/thanks",
         privacy: "By submitting you agree to be contacted via email and WhatsApp.",
         demoSubject: "I would like to see a Scalyns CRM demo",
+        demoNotice: "You will be redirected to a 1-hour demo of the Scalyns CRM.",
+        demoSubmit: "Request demo and try it now",
+        demoRedirecting: "Preparing your demo...",
+        demoBusy: "Our demo is temporarily at capacity. Try again in a few minutes — our team will reach out.",
         waitlistSubject: "I would like to join the waitlist",
         errors: {
           fast: "Submitted too quickly. Please fill in the form normally and try again.",

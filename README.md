@@ -52,12 +52,17 @@ Edite `src/data/produtos.ts` e adicione uma entrada usando uma das chaves de tex
 `src/i18n/ui.ts` (seção `platform`). Produtos com `status: "soon"` mostram o selo
 "Em breve" e o botão de lista de espera; `status: "available"` destaca o card com CTA.
 
-## Formulário de contato
+## Formulários
 
-O formulário posta para o Worker `lead-gateway` (Cloudflare) com Cloudflare Turnstile e
+O formulário de contato posta para o Worker `lead-gateway` (Cloudflare) com Cloudflare Turnstile e
 envia eventos para o GTM. O campo `source` diferencia a origem do lead
-(`site-home`, `crm-demo`, `waitlist-erp`, `waitlist-workspace`), e os botões de
-demonstração/lista de espera pré-preenchem o assunto automaticamente.
+(`site-home`, `waitlist-erp`, `waitlist-workspace`), e os botões de lista de espera pré-preenchem o
+assunto automaticamente.
+
+O formulário de demonstração do CRM (`src/components/Contact/DemoForm.astro`, usado apenas na
+página do CRM) segue o mesmo envio do lead e, em seguida, chama a API da demo
+(`PUBLIC_DEMO_API_URL`, padrão `https://demo.scalyns.cloud`) para redirecionar o visitante à
+demonstração de 1 hora. Se a demo estiver indisponível, o visitante vai para `/thanks`.
 
 ## Deploy (VPS)
 

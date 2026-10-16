@@ -1,6 +1,6 @@
 ---
 import AppMockup from "./usables/AppMockup.astro";
-import ContactForm from "./Contact/ContactForm.astro";
+import DemoForm from "./Contact/DemoForm.astro";
 import { useTranslations, whatsapp, type Lang } from "../i18n/ui";
 
 interface Props {
@@ -33,9 +33,9 @@ const integrationBadges = [
       <h1 class="mt-6 max-w-xl text-4xl font-title font-bold leading-tight text-white md:text-[2.9rem]">{page.title}</h1>
       <p class="mt-6 max-w-xl text-base leading-relaxed text-white/80 md:text-lg">{page.subtitle}</p>
       <div class="mt-8 flex flex-wrap items-center gap-4">
-        <button type="button" data-demo-cta class="rounded-full bg-white px-7 py-3 font-semibold text-primary shadow-lg shadow-black/20 transition hover:-translate-y-0.5 hover:bg-gray-100">
+        <a href="#contato" class="rounded-full bg-white px-7 py-3 font-semibold text-primary shadow-lg shadow-black/20 transition hover:-translate-y-0.5 hover:bg-gray-100">
           {page.ctaPrimary}
-        </button>
+        </a>
         <a href={whatsappHref} target="_blank" rel="noopener noreferrer" class="rounded-full border border-white/30 px-7 py-3 font-semibold text-white transition hover:bg-white/10">
           {page.ctaSecondary}
         </a>
@@ -158,6 +158,6 @@ const integrationBadges = [
         {t.contact.whatsappCta}
       </a>
     </div>
-    <ContactForm lang={lang} source="crm-demo" title={page.demoFormTitle} />
+    <DemoForm lang={lang} title={page.demoFormTitle} />
   </div>
 </section>

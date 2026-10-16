@@ -108,7 +108,7 @@ const FORM_ID = "site-4";
 
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 
-<script define:vars={{ id, thanksUrl: f.thanksUrl, demoSubject: f.demoSubject, waitlistSubject: f.waitlistSubject, validatePhone: lang === "pt", messages: { fast: f.errors.fast, phone: f.errors.phone, consent: f.errors.consent, captcha: f.errors.captcha, captchaLoad: f.errors.captchaLoad, worker: f.errors.worker, generic: f.errors.generic, unknown: f.errors.unknown, sending: f.sending, success: f.success, submit: f.submit } }}>
+<script define:vars={{ id, thanksUrl: f.thanksUrl, waitlistSubject: f.waitlistSubject, validatePhone: lang === "pt", messages: { fast: f.errors.fast, phone: f.errors.phone, consent: f.errors.consent, captcha: f.errors.captcha, captchaLoad: f.errors.captchaLoad, worker: f.errors.worker, generic: f.errors.generic, unknown: f.errors.unknown, sending: f.sending, success: f.success, submit: f.submit } }}>
   function validarTelefoneBR(valor) {
     const digits = (valor || "").replace(/\D/g, "");
     if (digits.length === 10) {
@@ -142,12 +142,6 @@ const FORM_ID = "site-4";
     }
 
     document.addEventListener("click", (event) => {
-      const demoButton = event.target.closest("[data-demo-cta]");
-      if (demoButton) {
-        event.preventDefault();
-        prefill(demoSubject, "crm-demo");
-        return;
-      }
       const waitlistButton = event.target.closest("[data-waitlist]");
       if (waitlistButton) {
         event.preventDefault();
