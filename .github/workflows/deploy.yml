@@ -17,7 +17,6 @@ jobs:
   deploy:
     name: Deploy to VPS
     runs-on: ubuntu-latest
-    timeout-minutes: 20
 
     steps:
       - name: Configure SSH
@@ -28,11 +27,20 @@ jobs:
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
 
-          printf '%s\n' "$SSH_KEY" > ~/.ssh/id_ed25519
+          printf '%s\n' "$SSH_KEY" | tr -d '\r' > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
 
           printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
           chmod 600 ~/.ssh/known_hosts
+
+      - name: Validate SSH key
+        run: |
+          if ssh-keygen -y -P "" -f ~/.ssh/id_ed25519 > /dev/null; then
+            echo "SSH private key is valid"
+          else
+            echo "::error::Invalid SSH private key. Check VPS_SSH_KEY."
+            exit 1
+          fi
 
       - name: Deploy Scalyns
         run: |
@@ -43,4 +51,3 @@ jobs:
             -o StrictHostKeyChecking=yes \
             root@76.13.160.239 \
             /usr/local/bin/deploy-scalyns-site.sh
-
