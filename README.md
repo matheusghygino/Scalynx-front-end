@@ -40,9 +40,10 @@ src/
 
 Os mockups em código podem ser substituídos por imagens reais:
 
-1. **Sites dos clientes:** coloque os prints em `public/clientes/` (ex.: `public/clientes/jsm.jpg`)
-   e preencha `preview: "/clientes/jsm.jpg"` no cliente correspondente em `src/data/clientes.ts`.
-   O componente `BrowserFrame` já exibe a imagem dentro da moldura de navegador.
+1. **Sites dos clientes:** coloque as miniaturas em `src/assets/`, importe-as em
+   `src/data/clientes.ts` e atribua a imagem importada ao campo `preview` do cliente.
+   O componente `BrowserFrame` gera versões WebP responsivas no build, preserva a imagem inteira
+   e usa carregamento sob demanda. As miniaturas atuais já incluem a moldura de navegador.
 2. **Vídeo de demonstração do CRM:** quando o vídeo estiver pronto, incorpore-o na seção
    `docs`/home adicionando um bloco de embed na seção do CRM (`CrmShowcase.astro`).
 

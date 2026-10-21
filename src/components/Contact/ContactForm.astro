@@ -1,5 +1,6 @@
 ---
 import { useTranslations, type Lang } from "../../i18n/ui";
+import TurnstileLoader from "./TurnstileLoader.astro";
 
 interface Props {
   lang?: Lang;
@@ -89,7 +90,7 @@ const FORM_ID = "scalyns";
       <span>{f.consent}</span>
     </label>
 
-    <div class="flex justify-center">
+    <div class="flex min-h-[65px] justify-center">
       <div class="cf-turnstile" data-sitekey={TURNSTILE_SITE_KEY} data-theme="auto" data-size="normal"></div>
     </div>
 
@@ -106,7 +107,7 @@ const FORM_ID = "scalyns";
   </form>
 </div>
 
-<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<TurnstileLoader />
 
 <script define:vars={{ id, thanksUrl: f.thanksUrl, waitlistSubject: f.waitlistSubject, validatePhone: lang === "pt", messages: { fast: f.errors.fast, phone: f.errors.phone, consent: f.errors.consent, captcha: f.errors.captcha, captchaLoad: f.errors.captchaLoad, worker: f.errors.worker, generic: f.errors.generic, unknown: f.errors.unknown, sending: f.sending, success: f.success, submit: f.submit } }}>
   function validarTelefoneBR(valor) {

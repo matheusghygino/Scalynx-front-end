@@ -1,3 +1,7 @@
+import type { ImageMetadata } from "astro";
+import jsmPreview from "../assets/jsm_miniatura.png";
+import fsPreview from "../assets/fs_construsction_miniatura.png";
+import ebPreview from "../assets/eb_servicos_miniatura.png";
 import type { Lang } from "../i18n/ui";
 
 export interface ClienteCase {
@@ -9,8 +13,7 @@ export interface ClienteCase {
   metricas: Record<Lang, string[]>;
   site?: string;
   instagram?: string;
-  crm?: string;
-  preview?: string;
+  preview?: ImageMetadata;
   monograma: string;
   cor: string;
 }
@@ -45,7 +48,8 @@ export const clientes: ClienteCase[] = [
       en: ["50+ leads/month", "20% organic", "90+ PageSpeed"],
     },
     site: "https://www.jsmcleaningsolutions.com/",
-    crm: "https://crm.jsmcleaningsolutions.com/",
+    instagram: "https://www.instagram.com/jsmcleaningsolution/",
+    preview: jsmPreview,
     monograma: "JSM",
     cor: "#0ea5e9",
   },
@@ -79,7 +83,7 @@ export const clientes: ClienteCase[] = [
     },
     site: "https://www.fsconstructionandremodeling.com/",
     instagram: "https://www.instagram.com/fsconstructionandremodeling/",
-    crm: "https://crm.fsconstructionandremodeling.com/",
+    preview: fsPreview,
     monograma: "FS",
     cor: "#f59e0b",
   },
@@ -88,17 +92,21 @@ export const clientes: ClienteCase[] = [
     nome: "EB Serviços",
     segmento: { pt: "Empresa de serviços · Brasil", en: "Services company · Brazil" },
     descricao: {
-      pt: "A EB Serviços estruturou sua operação comercial com a plataforma Scalyns. Implantamos o CRM próprio com funil de vendas, cadastro centralizado de contatos e histórico de atendimento — dando visibilidade total do processo comercial para o time.",
-      en: "EB Serviços structured its sales operation with the Scalyns platform. We deployed our CRM with a sales pipeline, centralized contact records and full service history — giving the team complete visibility of the sales process.",
+      pt: "A EB Serviços fortaleceu sua presença digital e estruturou sua operação comercial com a Scalyns. Desenvolvemos o site institucional, assumimos a gestão das redes sociais e implantamos o CRM próprio com funil de vendas, contatos centralizados e histórico de atendimento — conectando a divulgação da marca à organização do processo comercial.",
+      en: "EB Serviços strengthened its digital presence and structured its sales operation with Scalyns. We developed the company website, took over social media management and deployed our CRM with a sales pipeline, centralized contacts and full service history — connecting brand promotion with an organized sales process.",
     },
     ganhos: {
       pt: [
+        "Desenvolvimento do site institucional",
+        "Gestão de redes sociais e conteúdo da marca",
         "CRM próprio implantado no domínio da empresa",
         "Funil de vendas organizado por etapas",
         "Base de contatos centralizada com histórico",
         "Equipe trabalhando com acessos por perfil",
       ],
       en: [
+        "Company website development",
+        "Social media and brand content management",
         "Our CRM deployed on the company's own domain",
         "Sales pipeline organized by stages",
         "Centralized contact base with full history",
@@ -106,10 +114,11 @@ export const clientes: ClienteCase[] = [
       ],
     },
     metricas: {
-      pt: ["CRM implantado", "Funil organizado", "Equipe com acessos por perfil"],
-      en: ["CRM deployed", "Organized pipeline", "Role-based access"],
+      pt: ["Site institucional", "Gestão de redes sociais", "CRM implantado"],
+      en: ["Company website", "Social media management", "CRM deployed"],
     },
-    crm: "https://crm.eb-servicos.com/",
+    site: "https://eb-servicos.com/",
+    preview: ebPreview,
     monograma: "EB",
     cor: "#10b981",
   },

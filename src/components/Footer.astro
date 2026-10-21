@@ -1,5 +1,6 @@
 ---
-import logo from "../../public/logo_scalyns.png";
+import { Image } from "astro:assets";
+import logo from "../assets/logo_scalyns.png";
 import { contact, languages, useTranslations, whatsapp, type Lang } from "../i18n/ui";
 
 interface Props {
@@ -24,7 +25,7 @@ const navLinks = [
   <div class="mx-auto grid max-w-6xl grid-cols-2 gap-10 px-6 md:grid-cols-4">
     <div class="col-span-2 md:col-span-1">
       <a href={home} class="mb-4 inline-block">
-        <img src={logo.src} alt="Scalyns" class="h-12" />
+        <Image src={logo} alt="Scalyns" width={210} height={64} format="avif" quality={80} class="h-12 w-auto" loading="lazy" decoding="async" />
       </a>
       <p class="text-sm font-body leading-relaxed text-white/70">{t.footer.tagline}</p>
     </div>
@@ -39,7 +40,7 @@ const navLinks = [
     <div>
       <h3 class="mb-4 text-base font-semibold">{t.footer.contact}</h3>
       <ul class="space-y-2 text-sm text-white/80">
-        <li><a href={`mailto:${contact.email}`} class="transition hover:text-white hover:underline">{contact.email}</a></li>
+        <li><a href={`mailto:${contact.email}`} class="break-all transition hover:text-white hover:underline">{contact.email}</a></li>
         <li>
           <a href={whatsapp.link} target="_blank" rel="noopener noreferrer" class="transition hover:text-white hover:underline">
             {t.footer.whatsappLabel}: {whatsapp.phoneDisplay}
@@ -61,7 +62,7 @@ const navLinks = [
 
     <div>
       <h3 class="mb-4 text-base font-semibold">{t.footer.languageLabel}</h3>
-      <div class="flex items-center gap-2 text-sm">
+      <div class="flex flex-wrap items-center gap-2 text-sm">
         <a href="/?lang=pt" data-set-lang="pt" class={`rounded-full px-3 py-1 ${lang === "pt" ? "bg-white text-primary" : "border border-white/30 text-white/80 hover:text-white"}`}>Português</a>
         <a href="/en/?lang=en" data-set-lang="en" class={`rounded-full px-3 py-1 ${lang === "en" ? "bg-white text-primary" : "border border-white/30 text-white/80 hover:text-white"}`}>English</a>
       </div>

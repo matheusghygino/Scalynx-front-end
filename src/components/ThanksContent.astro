@@ -1,4 +1,6 @@
 ---
+import { Image } from "astro:assets";
+import logo from "../assets/logo_scalyns.png";
 import { whatsapp, useTranslations, type Lang } from "../i18n/ui";
 
 interface Props {
@@ -14,7 +16,7 @@ const whatsappHref = `${whatsapp.link}?text=${encodeURIComponent(message)}`;
 <main class="flex min-h-[70vh] items-center justify-center px-6 py-10 md:py-16">
   <section class="relative mt-24 w-full max-w-3xl overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-[#1b2145] to-primary text-neutral-50 shadow-2xl">
     <div class="flex items-center gap-3 border-b border-white/10 px-6 py-4">
-      <img src="/logo_scalyns.png" alt="Scalyns" class="h-16 w-auto" loading="eager" fetchpriority="high" />
+      <Image src={logo} alt="Scalyns" width={210} height={64} format="avif" quality={80} class="h-16 w-auto" loading="eager" decoding="async" />
       <span class="text-xs uppercase tracking-wider text-neutral-300/80">{t.thanks.badge}</span>
     </div>
 

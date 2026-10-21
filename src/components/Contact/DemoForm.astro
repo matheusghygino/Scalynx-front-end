@@ -1,5 +1,6 @@
 ---
 import { useTranslations, type Lang } from "../../i18n/ui";
+import TurnstileLoader from "./TurnstileLoader.astro";
 
 interface Props {
   lang?: Lang;
@@ -83,7 +84,7 @@ const FORM_ID = "scalyns";
       <span>{f.consent}</span>
     </label>
 
-    <div id={`${id}-turnstile`} class="flex justify-center"></div>
+    <div id={`${id}-turnstile`} class="flex min-h-[65px] justify-center"></div>
 
     <button
       type="submit"
@@ -98,7 +99,7 @@ const FORM_ID = "scalyns";
   </form>
 </div>
 
-<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<TurnstileLoader />
 
 <script define:vars={{ id, apiUrl: DEMO_API_URL, thanksUrl: f.thanksUrl, sitekey: TURNSTILE_SITE_KEY, validatePhone: lang === "pt", messages: { fast: f.errors.fast, phone: f.errors.phone, consent: f.errors.consent, captcha: f.errors.captcha, captchaLoad: f.errors.captchaLoad, worker: f.errors.worker, generic: f.errors.generic, unknown: f.errors.unknown, sending: f.sending, success: f.success, submit: f.demoSubmit, redirecting: f.demoRedirecting, busy: f.demoBusy } }}>
   function validarTelefoneBR(valor) {
@@ -140,9 +141,8 @@ const FORM_ID = "scalyns";
       });
     }
 
-    const widgetTimer = window.setInterval(() => {
-      if (window.turnstile) { renderWidget(); if (widgetId !== null) window.clearInterval(widgetTimer); }
-    }, 250);
+    document.addEventListener("scalyns:turnstile-ready", renderWidget, { once: true });
+    if (window.turnstile) renderWidget();
 
     function nextToken() {
       return new Promise((resolve, reject) => {

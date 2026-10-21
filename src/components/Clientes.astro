@@ -43,7 +43,7 @@ const home = languages[lang].homePath;
         class={`mt-10 grid items-start gap-10 rounded-3xl border border-white/10 bg-white/[0.03] p-6 md:p-10 lg:grid-cols-2 ${index === 0 ? "" : "hidden"}`}
       >
         <div class="space-y-5">
-          <BrowserFrame url={cliente.site ?? cliente.crm ?? "scalyns.com"} label={cliente.nome} monograma={cliente.monograma} cor={cliente.cor} imagem={cliente.preview} alt={`${t.clients.previewSoon} — ${cliente.nome}`} />
+          <BrowserFrame url={cliente.site ?? "scalyns.com"} label={cliente.nome} monograma={cliente.monograma} cor={cliente.cor} imagem={cliente.preview} alt={`${t.clients.previewSoon} — ${cliente.nome}`} />
           <div class="flex flex-wrap gap-2">
             {cliente.metricas[lang].map((metrica) => (
               <span class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-white/75">{metrica}</span>
@@ -77,11 +77,6 @@ const home = languages[lang].homePath;
             {cliente.site ? (
               <a href={cliente.site} target="_blank" rel="noopener noreferrer" class="rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-primary transition hover:bg-gray-100">
                 {t.clients.siteCta}
-              </a>
-            ) : null}
-            {cliente.crm ? (
-              <a href={cliente.crm} target="_blank" rel="noopener noreferrer" class="rounded-full border border-white/25 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10">
-                {t.clients.crmCta}
               </a>
             ) : null}
             {cliente.instagram ? (

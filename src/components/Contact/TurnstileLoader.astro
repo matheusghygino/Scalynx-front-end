@@ -1,0 +1,36 @@
+<script>
+  const forms = document.querySelectorAll<HTMLFormElement>("[data-contact-form], [data-demo-form]");
+
+  function loadTurnstile() {
+    if (document.querySelector("script[data-turnstile-api]")) return;
+
+    Object.assign(window, {
+      scalynsTurnstileReady() {
+        document.dispatchEvent(new Event("scalyns:turnstile-ready"));
+      },
+    });
+
+    const script = document.createElement("script");
+    script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?onload=scalynsTurnstileReady";
+    script.async = true;
+    script.dataset.turnstileApi = "";
+    script.addEventListener("error", () => script.remove(), { once: true });
+    document.head.appendChild(script);
+  }
+
+  // Antecipa a verificação ao aproximar-se do formulário, sem pesar na abertura da página.
+  if ("IntersectionObserver" in window) {
+    const observer = new IntersectionObserver((entries) => {
+      if (entries.some((entry) => entry.isIntersecting)) {
+        loadTurnstile();
+        observer.disconnect();
+      }
+    }, { rootMargin: "600px 0px" });
+
+    forms.forEach((form) => observer.observe(form));
+  } else {
+    loadTurnstile();
+  }
+
+  forms.forEach((form) => form.addEventListener("focusin", loadTurnstile));
+</script>
