@@ -71,7 +71,7 @@ const enPath = lang === "en" ? currentPath : (altPath ?? "/en/");
           } else {
             next = path.indexOf("/en") === 0 ? path.replace(/^\/en/, "") || "/" : path;
           }
-          location.replace(next + location.hash);
+           location.replace(next + location.search + location.hash);
         } catch (error) {}
       })();
     </script>

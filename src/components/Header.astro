@@ -19,6 +19,7 @@ const links = [
   { href: `${home}#sobre`, label: t.nav.about },
   { href: `${home}#servicos`, label: t.nav.services },
   { href: lang === "pt" ? "/crm" : "/en/crm", label: t.nav.crm },
+  { href: lang === "pt" ? "/erp" : "/en/erp", label: t.nav.erp },
   { href: `${home}#clientes`, label: t.nav.clients },
 ];
 ---
@@ -34,7 +35,7 @@ const links = [
 
     <button
       id="menuButton"
-      class="z-50 focus:outline-none md:hidden"
+      class="z-50 focus:outline-none lg:hidden"
       aria-controls="mobileMenu"
       aria-expanded="false"
       aria-label={t.nav.menu}
@@ -44,7 +45,7 @@ const links = [
       </svg>
     </button>
 
-    <nav class="hidden items-center gap-7 text-sm font-semibold md:flex" aria-label="Principal">
+    <nav class="hidden items-center gap-6 text-sm font-semibold lg:flex" aria-label={lang === "pt" ? "Principal" : "Main navigation"}>
       {links.map((link) => <a href={link.href} class="text-white/85 transition-colors hover:text-white">{link.label}</a>)}
       <div class="flex items-center gap-1 rounded-full border border-white/20 p-0.5" aria-label={t.nav.languageLabel}>
         <a href={`${ptPath}?lang=pt`} data-set-lang="pt" aria-current={lang === "pt" ? "true" : undefined} class={`rounded-full px-2.5 py-1 text-xs transition ${lang === "pt" ? "bg-white text-primary" : "text-white/70 hover:text-white"}`}>PT</a>
@@ -58,7 +59,7 @@ const links = [
 
   <div
     id="mobileMenu"
-    class="fixed left-0 top-0 z-40 flex h-screen w-full -translate-x-full flex-col items-center justify-center bg-gradient-to-b from-primary to-secondary text-white opacity-0 transition-all duration-500 ease-in-out md:hidden"
+    class="fixed left-0 top-0 z-40 flex h-screen w-full -translate-x-full flex-col items-center justify-center bg-gradient-to-b from-primary to-secondary text-white opacity-0 transition-all duration-500 ease-in-out lg:hidden"
   >
     <nav class="flex flex-col items-center space-y-6 text-center text-lg font-semibold">
       {links.map((link) => <a href={link.href} class="mobile-link">{link.label}</a>)}

@@ -1,0 +1,18 @@
+---
+import ErpMockup from "./usables/ErpMockup.astro";
+import { useErpCopy } from "../i18n/erp";
+import type { Lang } from "../i18n/ui";
+interface Props { lang?: Lang; }
+const { lang = "pt" } = Astro.props;
+const copy = useErpCopy(lang);
+const path = lang === "pt" ? "/erp" : "/en/erp";
+---
+<section id="erp" class="bg-surface py-16 lg:py-24">
+  <div class="mx-auto max-w-6xl px-6">
+    <div class="grid items-center gap-12 lg:grid-cols-2">
+      <ErpMockup lang={lang} />
+      <div><span class="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-400">{copy.eyebrow}</span><h2 class="mt-3 font-title text-3xl text-white md:text-4xl">{copy.homeTitle}</h2><p class="mt-5 leading-relaxed text-white/70">{copy.homeSubtitle}</p><div class="mt-7 flex flex-wrap gap-3"><a href={`${path}#contato`} class="rounded-full bg-white px-6 py-3 text-sm font-semibold text-primary transition hover:bg-gray-100">{copy.demoCta}</a><a href={path} class="rounded-full border border-white/25 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/10">{copy.detailsCta}</a></div></div>
+    </div>
+    <ul class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{copy.features.filter((_, index) => [0, 3, 5, 7].includes(index)).map((feature) => <li class="rounded-2xl border border-white/10 bg-white/[0.03] p-5"><h3 class="font-semibold text-white">{feature.title}</h3><p class="mt-3 text-sm leading-relaxed text-white/60">{feature.description}</p></li>)}</ul>
+  </div>
+</section>

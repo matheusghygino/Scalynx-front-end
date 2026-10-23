@@ -6,27 +6,31 @@ interface Props {
   lang?: Lang;
   id?: string;
   title?: string;
+  product?: "crm" | "erp";
 }
 
-const { lang = "pt", id = "scalynsDemoForm", title } = Astro.props;
+const { lang = "pt", id = "scalynsDemoForm", title, product = "crm" } = Astro.props;
 const t = useTranslations(lang);
 const f = t.contact.form;
 
 const WORKER_URL = "https://lead-gateway.matheus-hygino.workers.dev";
-const DEMO_API_URL = import.meta.env.PUBLIC_DEMO_API_URL ?? "https://demo.scalyns.cloud";
+const DEMO_API_URL = product === "erp" ? import.meta.env.PUBLIC_ERP_DEMO_API_URL ?? "https://erp-demo.scalyns.cloud" : import.meta.env.PUBLIC_DEMO_API_URL ?? "https://demo.scalyns.cloud";
 const TURNSTILE_SITE_KEY = "0x4AAAAAACBtETYrmppk61_g";
 const FORM_ID = "scalyns";
+const subject = lang === "pt" ? `Quero testar o Scalyns ${product.toUpperCase()}` : `I would like to try Scalyns ${product.toUpperCase()}`;
+const notice = lang === "pt" ? `Acesso automático por 1 hora ao Scalyns ${product.toUpperCase()}, com dados fictícios. Administração, convites e conexões externas bloqueados.` : `Automatic 1-hour access to Scalyns ${product.toUpperCase()} with fictional data. Administration, invitations and external connections are blocked.`;
+const messages = { fast: f.errors.fast, phone: f.errors.phone, consent: f.errors.consent, captcha: f.errors.captcha, captchaLoad: f.errors.captchaLoad, worker: f.errors.worker, generic: f.errors.generic, unknown: f.errors.unknown, sending: f.sending, success: f.success, submit: f.demoSubmit, redirecting: f.demoRedirecting, busy: f.demoBusy, unavailable: f.demoUnavailable, retry: f.demoRetry };
 ---
 
 <div class="rounded-2xl border border-white/10 bg-white/[0.04] p-6 shadow-xl shadow-black/30 md:p-8">
   <h3 class="mb-2 text-center font-title text-xl font-semibold text-white">{title ?? f.title}</h3>
-  <p class="mb-5 text-center text-xs text-sky-300">{f.demoNotice}</p>
+  <p class="mb-5 text-center text-xs leading-relaxed text-sky-300">{notice}</p>
 
-  <form id={id} data-demo-form data-worker-url={WORKER_URL} data-demo-api={DEMO_API_URL} method="POST" class="space-y-4" novalidate>
+  <form id={id} data-demo-form data-worker-url={WORKER_URL} data-demo-api={DEMO_API_URL} data-demo-product={product} data-demo-locale={lang === "pt" ? "pt-BR" : "en"} data-sitekey={TURNSTILE_SITE_KEY} data-validate-phone={lang === "pt" ? "true" : "false"} data-messages={JSON.stringify(messages)} method="POST" class="space-y-4" novalidate>
     <input type="hidden" name="form_id" value={FORM_ID} />
-    <input type="hidden" name="formSource" value="crm-demo" />
-    <input type="hidden" name="subject" value={f.demoSubject} />
-    <input type="hidden" name="ts_loaded" value={Date.now().toString()} />
+    <input type="hidden" name="formSource" value={`${product}-demo`} />
+    <input type="hidden" name="subject" value={subject} />
+    <input type="hidden" name="ts_loaded" />
     <input type="hidden" name="submittedAt" />
 
     <div class="hidden">
@@ -38,6 +42,7 @@ const FORM_ID = "scalyns";
       <input
         type="text"
         name="firstName"
+        aria-label={f.firstName}
         placeholder={f.firstName}
         required
         autocomplete="given-name"
@@ -46,6 +51,7 @@ const FORM_ID = "scalyns";
       <input
         type="text"
         name="lastName"
+        aria-label={f.lastName}
         placeholder={f.lastName}
         required
         autocomplete="family-name"
@@ -56,6 +62,7 @@ const FORM_ID = "scalyns";
     <input
       type="email"
       name="email"
+      aria-label={f.email}
       placeholder={f.email}
       required
       autocomplete="email"
@@ -65,6 +72,7 @@ const FORM_ID = "scalyns";
     <input
       type="tel"
       name="phone"
+      aria-label={f.phone}
       placeholder={f.phone}
       required
       inputmode="tel"
@@ -74,6 +82,7 @@ const FORM_ID = "scalyns";
 
     <textarea
       name="message"
+      aria-label={f.message}
       rows="3"
       placeholder={f.message}
       class="w-full rounded-lg border border-white/10 bg-white px-4 py-2.5 text-sm text-slate-900 placeholder-slate-500 outline-none transition focus:border-sky-400 focus:ring-2 focus:ring-sky-400/30"
@@ -95,151 +104,15 @@ const FORM_ID = "scalyns";
     </button>
 
     <p id={`${id}-result`} data-result class="mt-2 hidden text-center text-sm text-white/70" role="status" aria-live="polite"></p>
+    <a data-demo-followup href={`${f.thanksUrl}?source=${product}-demo`} class="hidden text-center text-sm font-semibold text-sky-300 underline underline-offset-4">{f.demoFollowup}</a>
     <p class="text-center text-xs text-white/45">{f.privacy}</p>
   </form>
 </div>
 
 <TurnstileLoader />
 
-<script define:vars={{ id, apiUrl: DEMO_API_URL, thanksUrl: f.thanksUrl, sitekey: TURNSTILE_SITE_KEY, validatePhone: lang === "pt", messages: { fast: f.errors.fast, phone: f.errors.phone, consent: f.errors.consent, captcha: f.errors.captcha, captchaLoad: f.errors.captchaLoad, worker: f.errors.worker, generic: f.errors.generic, unknown: f.errors.unknown, sending: f.sending, success: f.success, submit: f.demoSubmit, redirecting: f.demoRedirecting, busy: f.demoBusy } }}>
-  function validarTelefoneBR(valor) {
-    const digits = (valor || "").replace(/\D/g, "");
-    if (digits.length === 10) {
-      const ddd = digits.slice(0, 2);
-      const numero = digits.slice(2);
-      return /^[1-9]\d$/.test(ddd) && /^\d{8}$/.test(numero);
-    }
-    if (digits.length === 11) {
-      const ddd = digits.slice(0, 2);
-      const numero = digits.slice(2);
-      return /^[1-9]\d$/.test(ddd) && /^9\d{8}$/.test(numero);
-    }
-    if (digits.startsWith("55")) return validarTelefoneBR(digits.slice(2));
-    return false;
-  }
-
-  document.addEventListener("DOMContentLoaded", () => {
-    const form = document.getElementById(id);
-    const result = form?.querySelector("[data-result]");
-    const submitButton = form?.querySelector("[data-submit-button]");
-    const turnstileContainer = document.getElementById(id + "-turnstile");
-    if (!form || !result || !submitButton || !turnstileContainer) return;
-
-    let widgetId = null;
-    let pendingToken = null;
-
-    function renderWidget() {
-      if (widgetId !== null || !window.turnstile || !turnstileContainer) return;
-      widgetId = window.turnstile.render(turnstileContainer, {
-        sitekey,
-        theme: "auto",
-        // reset()/expiry invoke this callback with an empty token; ignore those.
-        callback: (token) => {
-          if (!token) return;
-          if (pendingToken) { const resolve = pendingToken; pendingToken = null; resolve(token); }
-        },
-      });
-    }
-
-    document.addEventListener("scalyns:turnstile-ready", renderWidget, { once: true });
-    if (window.turnstile) renderWidget();
-
-    function nextToken() {
-      return new Promise((resolve, reject) => {
-        if (widgetId === null) { reject(new Error("captcha_not_ready")); return; }
-        pendingToken = resolve;
-        try {
-          window.turnstile.reset(widgetId);
-          window.turnstile.execute(widgetId);
-        } catch {
-          pendingToken = null;
-          reject(new Error("captcha_not_ready"));
-          return;
-        }
-        window.setTimeout(() => {
-          if (pendingToken) { pendingToken = null; reject(new Error("captcha_timeout")); }
-        }, 15000);
-      });
-    }
-
-    function setResult(message, tone) {
-      result.textContent = message;
-      result.className = `text-center text-sm mt-2 ${tone === "error" ? "text-red-400" : tone === "success" ? "text-emerald-400" : "text-white/70"}`;
-      result.classList.remove("hidden");
-    }
-
-    function validateFields() {
-      const honeypot = form.querySelector('input[name="company_website"]')?.value || "";
-      if (honeypot) return false;
-
-      const ts = parseInt(form.querySelector('input[name="ts_loaded"]')?.value || "0", 10);
-      if (Date.now() - ts < 2000) { alert(messages.fast); return false; }
-
-      if (validatePhone) {
-        const phoneInput = form.querySelector('input[name="phone"]');
-        if (phoneInput && !validarTelefoneBR(phoneInput.value)) { alert(messages.phone); phoneInput.focus(); return false; }
-      }
-
-      if (!form.querySelector('input[name="consent"]')?.checked) { alert(messages.consent); return false; }
-      if (!form.checkValidity()) { form.reportValidity(); return false; }
-      return true;
-    }
-
-    form.addEventListener("submit", async (event) => {
-      event.preventDefault();
-      if (!validateFields()) return;
-
-      const workerUrl = form.dataset.workerUrl;
-      const demoApi = form.dataset.demoApi;
-      if (!workerUrl || !demoApi) { setResult(messages.worker, "error"); return; }
-
-      submitButton.disabled = true;
-      submitButton.textContent = messages.sending;
-      setResult(messages.sending, "info");
-
-      try {
-        const leadToken = await nextToken();
-        if (!leadToken) { setResult(messages.captcha, "error"); return; }
-        const formData = new FormData(form);
-        formData.set("cf-turnstile-response", leadToken);
-        const submittedAt = form.querySelector('input[name="submittedAt"]');
-        if (submittedAt) submittedAt.value = new Date().toISOString();
-
-        const leadResponse = await fetch(workerUrl, { method: "POST", body: formData });
-        const leadData = await leadResponse.json().catch(() => ({}));
-        if (!leadResponse.ok || !leadData.success) throw new Error(leadData.message || `HTTP ${leadResponse.status}`);
-
-        window.dataLayer = window.dataLayer || [];
-        const email = form.querySelector('input[name="email"]')?.value?.trim() || "";
-        const firstName = form.querySelector('input[name="firstName"]')?.value?.trim() || "";
-        const lastName = form.querySelector('input[name="lastName"]')?.value?.trim() || "";
-        if (email) window.dataLayer.push({ event: "user_identified", user_email: email, user_first_name: firstName, user_last_name: lastName });
-        window.dataLayer.push({ event: "form_submit", form_id: id, form_name: "Scalyns Demo Request", form_source: "crm-demo" });
-
-        setResult(messages.redirecting, "success");
-        submitButton.textContent = messages.redirecting;
-
-        try {
-          const demoToken = await nextToken();
-          if (!demoToken) throw new Error("captcha_not_ready");
-          const demoResponse = await fetch(`${demoApi}/api/demo/access`, {
-            method: "POST",
-            headers: { "content-type": "application/json" },
-            body: JSON.stringify({ email, name: `${firstName} ${lastName}`.trim(), turnstileToken: demoToken }),
-          });
-          const demoData = await demoResponse.json().catch(() => ({}));
-          if (demoResponse.ok && demoData.url) { window.location.href = demoData.url; return; }
-          if (demoData.error === "demo_busy" || demoData.message === "demo_busy") { setResult(messages.busy, "error"); }
-        } catch {
-          /* Lead is captured; fall through to the thanks page. */
-        }
-        window.setTimeout(() => { window.location.href = thanksUrl; }, 1200);
-      } catch (error) {
-        setResult(`${messages.generic}: ${error?.message || messages.unknown}`, "error");
-      } finally {
-        submitButton.disabled = false;
-        if (submitButton.textContent !== messages.redirecting) submitButton.textContent = messages.submit;
-      }
-    });
-  });
+<script>
+  import { initializeDemoForms } from "./demo-form";
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", initializeDemoForms, { once: true });
+  else initializeDemoForms();
 </script>

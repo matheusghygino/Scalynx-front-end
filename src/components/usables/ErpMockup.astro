@@ -1,0 +1,19 @@
+---
+import type { Lang } from "../../i18n/ui";
+import { useErpCopy } from "../../i18n/erp";
+interface Props { lang?: Lang; }
+const { lang = "pt" } = Astro.props;
+const pt = lang === "pt";
+const money = (value: number) => new Intl.NumberFormat(pt ? "pt-BR" : "en-US", { style: "currency", currency: pt ? "BRL" : "USD", maximumFractionDigits: 0 }).format(value);
+const cards = [{ title: pt ? "Faturamento" : "Billed", value: 29450, color: "text-sky-300" }, { title: pt ? "Recebimentos" : "Received", value: 10550, color: "text-emerald-300" }, { title: pt ? "Despesas" : "Expenses", value: 16450, color: "text-amber-300" }];
+---
+<figure class="min-w-0 overflow-hidden rounded-2xl border border-white/15 bg-[#121a2d] shadow-2xl shadow-black/30">
+  <div class="flex items-center justify-between gap-3 border-b border-white/10 bg-white/[0.03] px-4 py-3"><span class="text-sm font-semibold text-white">Scalyns <span class="text-emerald-300">ERP</span></span><span class="rounded-full bg-emerald-500/10 px-3 py-1 text-[10px] text-emerald-300">{pt ? "Empresa de exemplo" : "Sample company"}</span></div>
+  <div class="p-4 sm:p-5">
+    <div class="flex flex-wrap items-center justify-between gap-2"><span class="text-sm font-semibold text-white">{pt ? "Dashboard de gestão" : "Business dashboard"}</span><span class="text-[10px] text-white/50">{pt ? "Este mês · BRL" : "This month · USD"}</span></div>
+    <div class="mt-4 grid grid-cols-3 gap-2 sm:gap-3">{cards.map((card) => <div class="min-w-0 rounded-xl border border-white/10 bg-white/[0.03] p-2.5 sm:p-3"><p class="truncate text-[10px] text-white/60">{card.title}</p><p class={`mt-2 text-xs font-semibold tabular-nums sm:text-lg ${card.color}`}>{money(card.value)}</p></div>)}</div>
+    <div class="mt-4 rounded-xl border border-white/10 p-3"><div class="flex items-center justify-between gap-2 text-[10px]"><span class="text-white/75">{pt ? "Visão financeira" : "Financial overview"}</span><span class="text-emerald-300">{pt ? "Recebimentos e despesas" : "Receipts and expenses"}</span></div><svg class="mt-3 h-24 w-full sm:h-32" viewBox="0 0 400 110" preserveAspectRatio="none" aria-hidden="true"><path d="M0 30H400M0 65H400M0 100H400" fill="none" stroke="#ffffff12"/><path d="M0 85L50 75L100 82L150 52L200 60L250 28L300 40L350 14L400 23" fill="none" stroke="#34d399" stroke-width="3"/><path d="M0 95L50 86L100 92L150 78L200 82L250 60L300 71L350 55L400 62" fill="none" stroke="#38bdf8" stroke-width="3"/></svg></div>
+    <div class="mt-3 grid gap-3 sm:grid-cols-2"><div class="rounded-xl border border-amber-400/15 bg-amber-400/[0.04] p-3"><p class="text-[10px] font-semibold text-amber-300">{pt ? "Precisa de atenção" : "Needs attention"}</p><p class="mt-2 text-xs text-white/75">{pt ? "2 produtos abaixo do ponto de reposição" : "2 products below reorder point"}</p></div><div class="rounded-xl border border-white/10 p-3"><p class="text-[10px] text-white/50">{pt ? "Próximos compromissos" : "Upcoming commitments"}</p><p class="mt-2 text-xs text-white/75">{pt ? "Fornecedores e operação" : "Vendors and operations"} <span class="ml-1 font-semibold text-white">{money(4200)}</span></p></div></div>
+  </div>
+  <figcaption class="border-t border-white/5 px-4 py-2 text-center text-[10px] text-white/40">{useErpCopy(lang).illustration}</figcaption>
+</figure>

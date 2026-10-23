@@ -10,7 +10,6 @@ const { lang = "pt" } = Astro.props;
 const t = useTranslations(lang);
 const home = languages[lang].homePath;
 
-const crmPath = lang === "pt" ? "/crm" : "/en/crm";
 ---
 
 <section class="relative overflow-hidden bg-gradient-to-br from-primary via-[#1b2145] to-secondary pb-16 pt-28 text-white md:pb-24 md:pt-36">
@@ -32,7 +31,7 @@ const crmPath = lang === "pt" ? "/crm" : "/en/crm";
       </p>
 
       <div class="mt-8 flex flex-wrap items-center gap-4">
-        <a href={crmPath} class="rounded-full bg-white px-7 py-3 font-semibold text-primary shadow-lg shadow-black/20 transition hover:-translate-y-0.5 hover:bg-gray-100">
+        <a href="#plataforma" class="rounded-full bg-white px-7 py-3 font-semibold text-primary shadow-lg shadow-black/20 transition hover:-translate-y-0.5 hover:bg-gray-100">
           {t.hero.ctaPrimary}
         </a>
         <a href={`${home}#contato`} class="rounded-full border border-white/30 px-7 py-3 font-semibold text-white transition hover:bg-white/10">

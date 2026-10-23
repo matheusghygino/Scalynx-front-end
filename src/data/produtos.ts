@@ -25,12 +25,13 @@ export const produtos: Produto[] = [
   },
   {
     id: "erp",
-    status: "soon",
+    status: "available",
     nameKey: "erpName",
     descriptionKey: "erpDescription",
     ctaKey: "erpCta",
     icon: "erp",
-    waitlistSource: "waitlist-erp",
+    href: "/erp",
+    demo: true,
   },
   {
     id: "workspace",

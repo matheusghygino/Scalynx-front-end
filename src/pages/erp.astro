@@ -1,0 +1,8 @@
+---
+import Layout from "../layout/Layout.astro";
+import ErpPageContent from "../components/ErpPageContent.astro";
+import { useTranslations } from "../i18n/ui";
+const t = useTranslations("pt");
+const software = { "@context": "https://schema.org", "@type": "SoftwareApplication", name: "Scalyns ERP", applicationCategory: "BusinessApplication", operatingSystem: "Web", url: "https://scalyns.com/erp", description: t.meta.erpDescription, inLanguage: "pt-BR", featureList: "Clientes, fornecedores, catálogo, orçamentos, pedidos, cobranças, despesas, estoque e dashboard", publisher: { "@type": "Organization", name: "Scalyns", url: "https://scalyns.com" } };
+---
+<Layout lang="pt" title={t.meta.erpTitle} description={t.meta.erpDescription} altPath="/en/erp" structuredData={[software]}><ErpPageContent lang="pt" /></Layout>

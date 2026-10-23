@@ -24,9 +24,11 @@ export const contact = {
 const ui = {
   pt: {
     meta: {
-      homeTitle: "Scalyns | Marketing, CRM e Tecnologia para Empresas",
+      homeTitle: "Scalyns | CRM, ERP, Marketing e Tecnologia para Empresas",
       homeDescription:
-        "A Scalyns conecta marketing, operação e tecnologia: site de alta performance, CRM próprio, automações, tráfego pago, redes sociais e identidade visual.",
+        "CRM e ERP próprios, sites de alta performance, marketing e automações. Conecte vendas, financeiro e operação com a Scalyns e experimente nossas ferramentas.",
+      erpTitle: "Scalyns ERP | Financeiro, Vendas e Estoque | Teste por 1 hora",
+      erpDescription: "Organize clientes, fornecedores, produtos, orçamentos, pedidos, cobranças e despesas. Conheça o dashboard do Scalyns ERP e teste com dados fictícios por 1 hora.",
       crmTitle: "Scalyns CRM | Funil, Agenda e Operação em um só lugar",
       crmDescription:
         "CRM completo com funil visual, visibilidade por times, atividades sincronizadas com Google Agenda, anexos e relatórios. Solicite uma demonstração.",
@@ -38,6 +40,7 @@ const ui = {
       services: "Serviços",
       platform: "Plataforma",
       crm: "CRM",
+      erp: "ERP",
       clients: "Clientes",
       contact: "Contato",
       cta: "Solicitar Proposta",
@@ -50,8 +53,8 @@ const ui = {
       eyebrow: "Marketing · Operação · Tecnologia",
       title: "Marketing, operação e tecnologia em um só ecossistema.",
       subtitle:
-        "A Scalyns constrói a base digital da sua empresa: site de alta performance, CRM próprio, automações, tráfego pago, gestão de redes sociais e identidade visual — tudo integrado para gerar crescimento previsível.",
-      ctaPrimary: "Ver o Scalyns CRM",
+        "A Scalyns constrói a base digital da sua empresa: CRM para vender, ERP para gerir a operação, sites de alta performance, automações e marketing — uma estrutura que acompanha seu crescimento.",
+      ctaPrimary: "Conhecer o CRM e o ERP",
       ctaSecondary: "Solicitar proposta",
       stats: [
         { value: "90+", label: "PageSpeed nos sites entregues" },
@@ -64,7 +67,7 @@ const ui = {
     },
     about: {
       title: "Sobre a Scalyns",
-      text: "A Scalyns é um ecossistema digital completo para empresas que querem crescer com estrutura. Não somos apenas marketing digital: desenvolvemos toda a base tecnológica do seu negócio — site, redes sociais, identidade visual, CRM próprio, automações, workspace colaborativo, tráfego pago e integrações inteligentes. Criamos sistemas que conectam marketing, operação e gestão em um único ambiente.",
+      text: "A Scalyns é um ecossistema digital completo para empresas que querem crescer com estrutura. Desenvolvemos a base tecnológica do seu negócio — site, redes sociais, identidade visual, CRM e ERP próprios, automações, workspace colaborativo, tráfego pago e integrações. Criamos sistemas que aproximam marketing, vendas, operação e gestão.",
       points: [
         "Tecnologia proprietária: nossos próprios softwares, evoluindo com você",
         "Time único cuidando de marca, canais, dados e operação",
@@ -82,7 +85,7 @@ const ui = {
           icon: "globe",
           title: "Infraestrutura Digital",
           description:
-            "Site de alta performance (90+ PageSpeed), e-mail profissional, workspace corporativo com armazenamento em nuvem e CRM próprio.",
+            "Site de alta performance (90+ PageSpeed), e-mail profissional, CRM e ERP próprios e estrutura digital para a operação da sua empresa.",
           points: ["Sites rápidos e otimizados para conversão", "E-mail no seu domínio", "Workspace e arquivos na nuvem"],
         },
         {
@@ -126,7 +129,7 @@ const ui = {
       eyebrow: "Plataforma Scalyns",
       title: "Nossos softwares, evoluindo com o seu negócio",
       subtitle:
-        "Além dos serviços, a Scalyns desenvolve sua própria plataforma de gestão. O CRM já está no ar — e novos módulos chegam em breve.",
+        "Software próprio para cada etapa do negócio: CRM para o relacionamento comercial e ERP para vendas, financeiro e estoque. Conheça os produtos e teste com dados de exemplo.",
       statusAvailable: "Disponível",
       statusSoon: "Em breve",
       crmName: "Scalyns CRM",
@@ -136,8 +139,8 @@ const ui = {
       crmDemoCta: "Pedir demonstração",
       erpName: "Scalyns ERP",
       erpDescription:
-        "Orçamentos, pedidos, financeiro e estoque conectados ao CRM, para uma operação completa em um só sistema.",
-      erpCta: "Entrar na lista de espera",
+        "Clientes, fornecedores, catálogo, orçamentos, pedidos, cobranças, despesas e estoque — com um dashboard para acompanhar sua operação.",
+      erpCta: "Conhecer o ERP",
       workspaceName: "Scalyns Workspace",
       workspaceDescription:
         "E-mail corporativo, armazenamento em nuvem e colaboração para o time, dentro do mesmo ambiente da Scalyns.",
@@ -174,7 +177,7 @@ const ui = {
       title: "Vamos estruturar o crescimento da sua empresa?",
       subtitle: "Diagnóstico estratégico e arquitetura digital personalizada",
       textOne:
-        "A Scalyns desenvolve ecossistemas digitais completos para empresas que precisam crescer com organização, automação e posicionamento forte: sites de alta performance, CRM próprio, automações, workspace corporativo, atendimento omnichannel, tráfego pago, redes sociais e identidade visual.",
+        "A Scalyns desenvolve ecossistemas digitais para empresas que precisam crescer com organização e posicionamento forte: sites de alta performance, CRM e ERP próprios, automações, workspace corporativo, atendimento omnichannel, tráfego pago, redes sociais e identidade visual.",
       textTwo:
         "Se sua empresa precisa gerar mais leads, organizar processos internos, fortalecer a marca ou integrar tecnologia com marketing, vamos construir essa base juntos. Preencha o formulário e receba um diagnóstico estratégico personalizado.",
       address: "Atendemos empresas no Brasil e nos EUA",
@@ -198,6 +201,9 @@ const ui = {
         demoSubmit: "Solicitar demonstração e testar agora",
         demoRedirecting: "Preparando sua demonstração...",
         demoBusy: "Nossa demonstração está temporariamente cheia. Tente novamente em alguns minutos — nosso time entrará em contato.",
+        demoUnavailable: "Seu contato foi recebido, mas não foi possível abrir a demonstração agora. Tente novamente ou solicite o contato do nosso time.",
+        demoRetry: "Tentar abrir a demonstração novamente",
+        demoFollowup: "Receber contato do time",
         waitlistSubject: "Quero entrar na lista de espera",
         errors: {
           fast: "Envio muito rápido. Preencha o formulário normalmente e tente novamente.",
@@ -266,7 +272,7 @@ const ui = {
       ],
       demoTitle: "Veja o Scalyns CRM em ação",
       demoText:
-        "Preencha o formulário e nosso time agenda uma demonstração guiada, com um ambiente preparado para o seu segmento.",
+        "Preencha o formulário e entre automaticamente em um ambiente exclusivo por 1 hora, com dados fictícios. Explore o CRM sem criar senha. Administração, convites e conexões externas ficam desabilitados no teste.",
       demoFormTitle: "Solicitar demonstração",
     },
     thanks: {
@@ -283,9 +289,11 @@ const ui = {
   },
   en: {
     meta: {
-      homeTitle: "Scalyns | Marketing, CRM and Technology for Businesses",
+      homeTitle: "Scalyns | CRM, ERP, Marketing and Business Technology",
       homeDescription:
-        "Scalyns connects marketing, operations and technology: high-performance websites, our own CRM, automations, paid media, social media and brand identity.",
+        "Our own CRM and ERP, high-performance websites, marketing and automation. Bring sales, finance and operations together with Scalyns and explore our tools.",
+      erpTitle: "Scalyns ERP | Finance, Sales and Inventory | 1-Hour Demo",
+      erpDescription: "Manage customers, vendors, products, quotes, orders, invoices and expenses. Explore the Scalyns ERP dashboard and try a 1-hour sandbox with fictional data.",
       crmTitle: "Scalyns CRM | Pipeline, Calendar and Operations in One Place",
       crmDescription:
         "A complete CRM with a visual pipeline, team visibility, activities synced with Google Calendar, attachments and reports. Request a demo.",
@@ -297,6 +305,7 @@ const ui = {
       services: "Services",
       platform: "Platform",
       crm: "CRM",
+      erp: "ERP",
       clients: "Clients",
       contact: "Contact",
       cta: "Request a Proposal",
@@ -309,8 +318,8 @@ const ui = {
       eyebrow: "Marketing · Operations · Technology",
       title: "Marketing, operations and technology in one ecosystem.",
       subtitle:
-        "Scalyns builds your company's digital foundation: a high-performance website, our own CRM, automations, paid media, social media management and brand identity — all integrated for predictable growth.",
-      ctaPrimary: "See the Scalyns CRM",
+        "Scalyns builds your digital foundation: CRM for sales, ERP for business operations, high-performance websites, automation and marketing — a structure that grows with your company.",
+      ctaPrimary: "Explore our CRM and ERP",
       ctaSecondary: "Request a proposal",
       stats: [
         { value: "90+", label: "PageSpeed on delivered websites" },
@@ -323,7 +332,7 @@ const ui = {
     },
     about: {
       title: "About Scalyns",
-      text: "Scalyns is a complete digital ecosystem for companies that want to grow with structure. We are not just digital marketing: we build the entire technology foundation of your business — website, social media, brand identity, our own CRM, automations, collaborative workspace, paid media and smart integrations. We create systems that connect marketing, operations and management in a single environment.",
+      text: "Scalyns is a complete digital ecosystem for businesses growing with structure. We build your technology foundation — websites, social media, brand identity, our own CRM and ERP, automation, collaborative workspace, paid media and integrations. Our systems bring marketing, sales, operations and management closer together.",
       points: [
         "Proprietary technology: our own software, evolving with you",
         "A single team handling brand, channels, data and operations",
@@ -341,7 +350,7 @@ const ui = {
           icon: "globe",
           title: "Digital Infrastructure",
           description:
-            "High-performance websites (90+ PageSpeed), professional email, corporate workspace with cloud storage and our own CRM.",
+            "High-performance websites (90+ PageSpeed), professional email, our own CRM and ERP, and a digital foundation for your business operations.",
           points: ["Fast websites optimized for conversion", "Email on your own domain", "Workspace and cloud files"],
         },
         {
@@ -385,7 +394,7 @@ const ui = {
       eyebrow: "Scalyns Platform",
       title: "Our software, evolving with your business",
       subtitle:
-        "Beyond services, Scalyns builds its own management platform. The CRM is live today — and new modules are coming soon.",
+        "Our own software for each stage of your business: CRM for customer relationships and ERP for sales, finance and inventory. Explore the products and try them with sample data.",
       statusAvailable: "Available",
       statusSoon: "Coming soon",
       crmName: "Scalyns CRM",
@@ -395,8 +404,8 @@ const ui = {
       crmDemoCta: "Request a demo",
       erpName: "Scalyns ERP",
       erpDescription:
-        "Quotes, orders, finance and inventory connected to the CRM, for a complete operation in one system.",
-      erpCta: "Join the waitlist",
+        "Customers, vendors, catalog, quotes, orders, invoices, expenses and inventory — with a dashboard to monitor your operations.",
+      erpCta: "Explore the ERP",
       workspaceName: "Scalyns Workspace",
       workspaceDescription:
         "Corporate email, cloud storage and team collaboration, inside the same Scalyns environment.",
@@ -433,7 +442,7 @@ const ui = {
       title: "Shall we structure your company's growth?",
       subtitle: "Strategic diagnosis and personalized digital architecture",
       textOne:
-        "Scalyns builds complete digital ecosystems for companies that need to grow with organization, automation and a strong positioning: high-performance websites, our own CRM, automations, corporate workspace, omnichannel support, paid media, social media and brand identity.",
+        "Scalyns builds digital ecosystems for businesses growing with organization and strong positioning: high-performance websites, our own CRM and ERP, automation, corporate workspace, omnichannel support, paid media, social media and brand identity.",
       textTwo:
         "If your company needs to generate more leads, organize internal processes, strengthen its brand or connect technology with marketing, let's build that foundation together. Fill in the form and receive a personalized strategic diagnosis.",
       address: "Serving businesses in the US and Brazil",
@@ -457,6 +466,9 @@ const ui = {
         demoSubmit: "Request demo and try it now",
         demoRedirecting: "Preparing your demo...",
         demoBusy: "Our demo is temporarily at capacity. Try again in a few minutes — our team will reach out.",
+        demoUnavailable: "We received your contact details, but could not open the demo right now. Retry or request a follow-up from our team.",
+        demoRetry: "Try opening the demo again",
+        demoFollowup: "Request a follow-up",
         waitlistSubject: "I would like to join the waitlist",
         errors: {
           fast: "Submitted too quickly. Please fill in the form normally and try again.",
@@ -525,7 +537,7 @@ const ui = {
       ],
       demoTitle: "See the Scalyns CRM in action",
       demoText:
-        "Fill in the form and our team will schedule a guided demo, with an environment prepared for your industry.",
+        "Fill in the form to enter your own sandbox automatically for 1 hour, with fictional data and no password to create. Administration, invitations and external connections are disabled in the trial.",
       demoFormTitle: "Request a demo",
     },
     thanks: {
