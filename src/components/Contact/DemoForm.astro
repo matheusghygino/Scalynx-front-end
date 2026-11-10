@@ -19,7 +19,7 @@ const TURNSTILE_SITE_KEY = "0x4AAAAAACBtETYrmppk61_g";
 const FORM_ID = "scalyns";
 const subject = lang === "pt" ? `Quero testar o Scalyns ${product.toUpperCase()}` : `I would like to try Scalyns ${product.toUpperCase()}`;
 const notice = lang === "pt" ? `Acesso automático por 1 hora ao Scalyns ${product.toUpperCase()}, com dados fictícios. Administração, convites e conexões externas bloqueados.` : `Automatic 1-hour access to Scalyns ${product.toUpperCase()} with fictional data. Administration, invitations and external connections are blocked.`;
-const messages = { fast: f.errors.fast, phone: f.errors.phone, consent: f.errors.consent, captcha: f.errors.captcha, captchaLoad: f.errors.captchaLoad, worker: f.errors.worker, generic: f.errors.generic, unknown: f.errors.unknown, sending: f.sending, success: f.success, submit: f.demoSubmit, redirecting: f.demoRedirecting, busy: f.demoBusy, unavailable: f.demoUnavailable, retry: f.demoRetry };
+const messages = { fast: f.errors.fast, phone: f.errors.phone, consent: f.errors.consent, captcha: f.errors.captcha, captchaLoad: f.errors.captchaLoad, worker: f.errors.worker, generic: f.errors.generic, unknown: f.errors.unknown, sending: f.sending, success: f.success, submit: f.demoSubmit, redirecting: f.demoRedirecting, busy: f.demoBusy, unavailable: f.demoUnavailable, retry: f.demoRetry, captchaRejected: f.demoCaptchaRejected, verificationUnavailable: f.demoVerificationUnavailable, configuration: f.demoConfiguration, validation: f.demoValidation };
 ---
 
 <div class="rounded-2xl border border-white/10 bg-white/[0.04] p-6 shadow-xl shadow-black/30 md:p-8">

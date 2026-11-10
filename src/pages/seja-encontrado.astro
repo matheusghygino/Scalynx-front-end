@@ -1,0 +1,40 @@
+---
+import Layout from "../layout/Layout.astro";
+import CampanhaPageContent from "../components/CampanhaPageContent.astro";
+
+const title = "Seja encontrado no Google | Scalyns para pequenos negócios";
+const description =
+  "Site profissional em 7 dias, Google Local Services, anúncios com rastreamento de ligações e CRM simples. Pacotes a partir de US$ 497, sem contrato longo e com atendimento em português.";
+
+const service = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  name: "Presença digital para pequenos negócios",
+  serviceType: "Site profissional, Google Local Services, Google Ads e CRM",
+  provider: {
+    "@type": "Organization",
+    name: "Scalyns",
+    url: "https://scalyns.com",
+  },
+  areaServed: ["Estados Unidos", "Brasil"],
+  offers: {
+    "@type": "Offer",
+    priceCurrency: "USD",
+    price: "497",
+    description: "Pacotes a partir de US$ 497, sem contrato longo e com atendimento em português.",
+  },
+  url: "https://scalyns.com/seja-encontrado",
+  inLanguage: "pt-BR",
+};
+---
+
+<Layout
+  lang="pt"
+  title={title}
+  description={description}
+  altPath="/en/"
+  lockLang
+  structuredData={[service]}
+>
+  <CampanhaPageContent />
+</Layout>

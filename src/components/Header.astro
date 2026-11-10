@@ -6,14 +6,15 @@ import { languages, useTranslations, type Lang } from "../i18n/ui";
 interface Props {
   lang?: Lang;
   currentPath?: string;
+  altPath?: string;
 }
 
-const { lang = "pt", currentPath = "/" } = Astro.props;
+const { lang = "pt", currentPath = "/", altPath } = Astro.props;
 const t = useTranslations(lang);
 const home = languages[lang].homePath;
 
-const enPath = lang === "pt" ? (currentPath === "/" ? "/en/" : `/en${currentPath}`) : currentPath;
-const ptPath = lang === "en" ? (currentPath.replace(/^\/en/, "") || "/") : currentPath;
+const enPath = lang === "pt" ? (altPath ?? (currentPath === "/" ? "/en/" : `/en${currentPath}`)) : currentPath;
+const ptPath = lang === "en" ? (altPath ?? (currentPath.replace(/^\/en/, "") || "/")) : currentPath;
 
 const links = [
   { href: `${home}#sobre`, label: t.nav.about },

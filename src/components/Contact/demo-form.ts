@@ -1,6 +1,18 @@
-type Messages = Record<"fast" | "phone" | "consent" | "captcha" | "captchaLoad" | "worker" | "generic" | "unknown" | "sending" | "submit" | "redirecting" | "busy" | "unavailable" | "retry", string>;
+type Messages = Record<"fast" | "phone" | "consent" | "captcha" | "captchaLoad" | "worker" | "generic" | "unknown" | "sending" | "submit" | "redirecting" | "busy" | "unavailable" | "retry" | "captchaRejected" | "verificationUnavailable" | "configuration" | "validation", string>;
 interface Turnstile { render(container: HTMLElement, options: Record<string, unknown>): string; reset(id: string): void; execute(id: string): void; }
 type DemoWindow = Window & { turnstile?: Turnstile; dataLayer?: unknown[] };
+
+export function demoAccessFailure(payload: unknown): "busy" | "captchaRejected" | "verificationUnavailable" | "configuration" | "validation" | "unavailable" {
+  if (!payload || typeof payload !== "object") return "unavailable";
+  const value = payload as { error?: unknown; message?: unknown };
+  const codes = [value.error, value.message];
+  if (codes.includes("captcha_failed")) return "captchaRejected";
+  if (codes.includes("captcha_unavailable")) return "verificationUnavailable";
+  if (codes.includes("demo_not_configured") || codes.includes("demo_disabled")) return "configuration";
+  if (codes.includes("validation_error")) return "validation";
+  if (codes.includes("demo_busy")) return "busy";
+  return "unavailable";
+}
 
 function validPhone(value: string): boolean {
   const digits = value.replace(/\D/g, "");
@@ -27,12 +39,17 @@ function initialize(form: HTMLFormElement): void {
   let pending: { resolve(value: string): void; reject(reason: Error): void; timer: number } | null = null;
   let sending = false;
   let capturedSignature = "";
+  const usedTokens = new Set<string>();
 
   function finish(token?: string): void {
     if (!pending) return;
     window.clearTimeout(pending.timer);
     const current = pending; pending = null;
-    if (token) current.resolve(token); else current.reject(new Error("captcha_failed"));
+    if (token && !usedTokens.has(token)) {
+      usedTokens.add(token);
+      if (usedTokens.size > 16) usedTokens.delete(usedTokens.values().next().value!);
+      current.resolve(token);
+    } else current.reject(new Error("captcha_failed"));
   }
   function renderWidget(): void {
     if (widget !== null || !win.turnstile) return;
@@ -40,6 +57,8 @@ function initialize(form: HTMLFormElement): void {
       sitekey: form.dataset.sitekey, theme: "auto", execution: "execute",
       callback: (token: string) => { if (token) finish(token); },
       "error-callback": () => finish(),
+      "expired-callback": () => finish(),
+      "timeout-callback": () => finish(),
     });
   }
   document.addEventListener("scalyns:turnstile-ready", renderWidget, { once: true });
@@ -48,7 +67,7 @@ function initialize(form: HTMLFormElement): void {
     renderWidget();
     return new Promise((resolve, reject) => {
       if (widget === null || !win.turnstile) { reject(new Error("captcha_not_ready")); return; }
-      pending = { resolve, reject, timer: window.setTimeout(() => finish(), 15000) };
+      pending = { resolve, reject, timer: window.setTimeout(() => finish(), 30000) };
       try { win.turnstile.reset(widget); win.turnstile.execute(widget); } catch { finish(); }
     });
   }
@@ -90,13 +109,14 @@ function initialize(form: HTMLFormElement): void {
         body: JSON.stringify({ email, name: `${firstName} ${lastName}`.trim(), turnstileToken: token, ...(form.dataset.demoProduct === "erp" ? { locale: form.dataset.demoLocale } : {}) }),
       });
       const payload = await response.json().catch(() => ({}));
-      if (!response.ok || typeof payload.url !== "string") { show(payload.error === "demo_busy" || payload.message === "demo_busy" ? messages.busy : messages.unavailable, true); return; }
+      if (!response.ok || typeof payload.url !== "string") { show(messages[demoAccessFailure(payload)], true); return; }
       const destination = new URL(payload.url);
       if (destination.origin !== new URL(api).origin || destination.pathname !== "/api/demo/start" || !destination.searchParams.get("token")) throw new Error("invalid_demo_url");
       win.dataLayer?.push({ event: "demo_access_granted", product: form.dataset.demoProduct, form_source: `${form.dataset.demoProduct}-demo` });
       redirecting = true; window.location.assign(destination.href);
     } catch (error) {
-      show(capturedSignature === signature ? messages.unavailable : error instanceof Error && error.message.startsWith("captcha") ? messages.captcha : messages.generic, true);
+      const captchaFailure = error instanceof Error && error.message.startsWith("captcha");
+      show(captchaFailure ? capturedSignature === signature ? messages.captchaRejected : error.message === "captcha_not_ready" ? messages.captchaLoad : messages.captcha : capturedSignature === signature ? messages.unavailable : messages.generic, true);
     } finally {
       sending = false;
       if (!redirecting) { button.disabled = false; button.textContent = capturedSignature === signature ? messages.retry : messages.submit; followup.classList.toggle("hidden", capturedSignature !== signature); followup.classList.toggle("block", capturedSignature === signature); }

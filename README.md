@@ -77,6 +77,13 @@ Se a demo estiver cheia ou indisponível após o registro do lead, o formulário
 e permite tentar abrir o teste novamente sem duplicar o mesmo lead. Um link para `/thanks`
 permite optar pelo contato da equipe. Nenhuma credencial privada vai para o site.
 
+Captcha recusado, indisponibilidade da verificação, configuração incorreta e lotação têm mensagens
+próprias em PT/EN. A retentativa recebe um token novo e não recaptura um contato idêntico já aceito.
+As APIs das duas demos usam a Secret Key do mesmo widget em `TURNSTILE_SECRET`; a chave privada
+fica somente no backend. O site usa apenas a Site Key pública. A API v1.9.1 diferencia as causas
+de falha e registra códigos de diagnóstico sem tokens/chaves; versões anteriores continuam recebendo
+os mesmos corpos de requisição.
+
 As variáveis públicas são resolvidas no **build**. Seus valores padrão já apontam para os dois
 domínios de demonstração. O ERP precisa estar publicado antes de divulgar o formulário em produção.
 As duas demos bloqueiam administração, convites e conexões externas. Os mockups do ERP são

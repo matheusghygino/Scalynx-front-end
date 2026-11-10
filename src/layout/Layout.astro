@@ -16,6 +16,7 @@ interface Props {
   ogType?: string;
   altPath?: string;
   structuredData?: Record<string, unknown>[];
+  lockLang?: boolean;
 }
 
 const {
@@ -27,6 +28,7 @@ const {
   ogType = "website",
   altPath,
   structuredData = [],
+  lockLang = false,
 } = Astro.props;
 
 const t = useTranslations(lang);
@@ -49,32 +51,34 @@ const enPath = lang === "en" ? currentPath : (altPath ?? "/en/");
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <script is:inline>
-      (function () {
-        try {
-          var here = document.documentElement.getAttribute("data-lang");
-          var forced = new URLSearchParams(location.search).get("lang");
-          var stored = null;
-          try { stored = localStorage.getItem("scalyns_lang"); } catch (error) {}
-          var target = forced || stored;
-          if (!target) {
-            var nav = (navigator.language || "en").toLowerCase();
-            target = nav.indexOf("pt") === 0 ? "pt" : "en";
-          }
-          if (target !== "pt" && target !== "en") return;
-          try { localStorage.setItem("scalyns_lang", target); } catch (error) {}
-          if (target === here) return;
-          var path = location.pathname;
-          var next;
-          if (target === "en") {
-            next = path.indexOf("/en") === 0 ? path : path === "/" ? "/en/" : "/en" + path;
-          } else {
-            next = path.indexOf("/en") === 0 ? path.replace(/^\/en/, "") || "/" : path;
-          }
-           location.replace(next + location.search + location.hash);
-        } catch (error) {}
-      })();
-    </script>
+    {!lockLang && (
+      <script is:inline>
+        (function () {
+          try {
+            var here = document.documentElement.getAttribute("data-lang");
+            var forced = new URLSearchParams(location.search).get("lang");
+            var stored = null;
+            try { stored = localStorage.getItem("scalyns_lang"); } catch (error) {}
+            var target = forced || stored;
+            if (!target) {
+              var nav = (navigator.language || "en").toLowerCase();
+              target = nav.indexOf("pt") === 0 ? "pt" : "en";
+            }
+            if (target !== "pt" && target !== "en") return;
+            try { localStorage.setItem("scalyns_lang", target); } catch (error) {}
+            if (target === here) return;
+            var path = location.pathname;
+            var next;
+            if (target === "en") {
+              next = path.indexOf("/en") === 0 ? path : path === "/" ? "/en/" : "/en" + path;
+            } else {
+              next = path.indexOf("/en") === 0 ? path.replace(/^\/en/, "") || "/" : path;
+            }
+            location.replace(next + location.search + location.hash);
+          } catch (error) {}
+        })();
+      </script>
+    )}
 
     <title>{pageTitle}</title>
     <meta name="description" content={pageDescription} />
@@ -146,7 +150,7 @@ const enPath = lang === "en" ? currentPath : (altPath ?? "/en/");
         style="display:none;visibility:hidden"></iframe>
     </noscript>
 
-    <Header lang={lang} currentPath={currentPath} />
+    <Header lang={lang} currentPath={currentPath} altPath={altPath} />
 
     <main id="main-content">
       <slot />
